@@ -1,0 +1,9 @@
+{% extends '_base.html' %}
+{% block title %}Index{% endblock title %}
+
+{% block body %}
+<ul>
+    <li><a href="/">Localhost</a></li>
+    <li><a href="{% url "shortener:index" %}">Shortener</a></li>
+</ul>
+{% endblock body %}

@@ -1,0 +1,7 @@
+{% load static %}
+<link rel="stylesheet" href="{% static "shortener/include/navbar.css" %}">
+<div id="navbar">
+    <a href="{% url "shortener:index" %}" id="navbar-item">Shorty</a>
+    <a href="#" id="navbar-item">API</a>
+    <a href="{% url "shortener_graphql" %}" id="navbar-item">GraphQL</a>
+</div>
