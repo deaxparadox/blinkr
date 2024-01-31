@@ -1,0 +1,30 @@
+{% extends 'shortener/_base.html' %}
+{% block title %}Shortener{% endblock title %}
+
+{% block body %}
+<div id="container">
+    <div id="inner">
+    </div>
+</div>
+<div id="container">
+    <table id="url-table">
+        <tr id="url-heading-row">
+            <th>Sr no</th>
+            <th>URL</th>
+            <th>Url Hash</th>
+            <th>Clicks</th>
+            <th>Created</th>
+        </tr>
+        {% comment %} {{ url_list }} {% endcomment %}
+        {% for url in url_list %}
+        <tr class="url-data-row">
+            <td>{{ url.id }}</td>
+            <td>{{ url.full_url|truncatechars:50}}</td>
+            <td>{{ url.url_hash}}</td>
+            <td>{{ url.clicks }}</td>
+            <td>{{ url.created_at|date }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock body %}

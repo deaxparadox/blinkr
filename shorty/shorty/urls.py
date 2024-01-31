@@ -27,6 +27,8 @@ urlpatterns = [
     path("", index_view, name="index"),
     path("shortener/", include([
         path("", include("shortener.urls", namespace="shortener")),
+
+        # GraphQL path
         path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="shortener_graphql"),
     ])),
 ] + [
