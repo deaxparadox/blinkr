@@ -1,5 +1,9 @@
 from hashlib import md5
 from django.db import models
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+
+from graphql import GraphQLError
 
 class URL(models.Model):
     full_url = models.URLField(unique=True)
@@ -14,6 +18,16 @@ class URL(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.url_hash = md5(self.full_url.encode()).hexdigest()[:10]
+
+        """
+        First, this code instantiates the `URLValidator` in the validate variable. Inside the `try/except` block, you `validate()` the URL received and raise a `GraphQLError` with the `invalid url` custom message if something went wrong.
+        """
+        validate = URLValidator()
+        try:
+            validate(self.full_url)
+        except ValidationError as e:
+            raise GraphQLError("invalid url")
+
         return super().save(*args, **kwargs)
     
     def __str__(self):
