@@ -18,17 +18,38 @@ from django.contrib import admin
 from django.urls import path, include
 
 from django.views.decorators.csrf import csrf_exempt
-
 from graphene_django.views import GraphQLView
 
 from .views import index_view
 
 urlpatterns = [
+    
     path("", index_view, name="index"),
-    path("shortener/", include([
-        path("", include("shortener.urls", namespace="shortener")),
-        path("api/", include("shortener.api.urls", namespace="shortener_api"))
-    ])),
+    
+    path(
+        "shortener/", 
+        include([
+            path("api/", include("shortener.api.urls", namespace="shortener_api")),
+            path("", include("shortener.urls", namespace="shortener")),
+        ])
+    ),
+    
+    
+    
+    # path(
+    #     "",
+    #     include([
+    #         path("", index_view, name="index"),
+    #         path("shortener/", include("shortener.urls", namespace="shortener")),
+    #     ])
+    # ),
+    # path(
+    #     "api/",
+    #     include([
+    #         path("", index_view, name="index"),
+    #         path("shortener/", include("shortener.api.urls", namespace="shortener_api")),
+    #     ])
+    # ),
 
     # GraphQL path
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="shortener_graphql"),

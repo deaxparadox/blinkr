@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from .views import (
     index_view,
@@ -10,5 +10,5 @@ app_name = "shortener"
 
 urlpatterns = [
     path("", IndexView.as_view(), name="index"),
-    path("<str:url_hash>/", root, name="root")
+    path("redirect/", root, name="root"),
 ]
