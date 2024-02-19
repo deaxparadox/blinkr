@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock title %}</title>
-    <link rel="stylesheet" href="{% static "_base.css" %}">
+    <link rel="stylesheet" href="{% static "shortener/_base.css" %}">
     {% block css %}{% endblock css %}
 </head>
 <body>
@@ -16,7 +16,7 @@
         {% block body %}{% endblock body %}
     </div>
 
-    <script src="{% static "_base.js" %}"></script>
+    <script src="{% static "shortener/_base.js" %}"></script>
     {% block js %}{% endblock js %}
 </body>
 </html>

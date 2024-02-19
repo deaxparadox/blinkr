@@ -27,11 +27,11 @@ urlpatterns = [
     path("", index_view, name="index"),
     path("shortener/", include([
         path("", include("shortener.urls", namespace="shortener")),
+        path("api/", include("shortener.api.urls", namespace="shortener_api"))
     ])),
 
     # GraphQL path
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="shortener_graphql"),
 ] + [
-    path('admin/', admin.site.urls),
-    
+    path('admin/', admin.site.urls),   
 ]
