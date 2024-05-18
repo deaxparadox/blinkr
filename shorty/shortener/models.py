@@ -20,7 +20,11 @@ class URL(models.Model):
             self.url_hash = md5(self.full_url.encode()).hexdigest()[:10]
 
         """
-        First, this code instantiates the `URLValidator` in the validate variable. Inside the `try/except` block, you `validate()` the URL received and raise a `GraphQLError` with the `invalid url` custom message if something went wrong.
+        First, this code instantiates the `URLValidator` 
+        in the validate variable. Inside the `try/except` 
+        block, you `validate()` the URL received and raise 
+        a `GraphQLError` with the `invalid url` custom message 
+        if something went wrong.
         """
         validate = URLValidator()
         try:

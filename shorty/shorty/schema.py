@@ -1,14 +1,14 @@
 import graphene
-import shortener.graphql.schema
+import gql.schema
 
 """
 It hold, via inheritence, all the Queries and future operations, created:
 """
-class Query(shortener.graphql.schema.Query, graphene.ObjectType):
+class Query(gql.schema.Query, graphene.ObjectType):
     pass
 
 
-class Mutation(shortener.graphql.schema.Mutation, graphene.ObjectType):
+class Mutation(gql.schema.Mutation, graphene.ObjectType):
     ...
 
 

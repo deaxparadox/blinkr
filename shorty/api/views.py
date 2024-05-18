@@ -6,7 +6,7 @@ from django.db import IntegrityError
 
 from django.db.models import QuerySet
 
-from shortener.api.serializers import URLSerializer, HashURLSerializer
+from .serializers import URLSerializer, HashURLSerializer
 from shortener.models import URL
 
 @api_view(["GET"])

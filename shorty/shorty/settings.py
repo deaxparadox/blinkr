@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "graphene_django"
 ] + [
     "shortener.apps.ShortenerConfig",
+    "api.apps.ApiConfig",
+    "gql.apps.GqlConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  shorty:
+    build: 
+      context: ./shorty
+      dockerfile: Dockerfile
+    container_name: backend-url
+    entrypoint: "run.sh"

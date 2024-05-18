@@ -29,7 +29,7 @@ urlpatterns = [
     path(
         "shortener/", 
         include([
-            path("api/", include("shortener.api.urls", namespace="shortener_api")),
+            path("api/", include("api.urls", namespace="api")),
             path("", include("shortener.urls", namespace="shortener")),
         ])
     ),
