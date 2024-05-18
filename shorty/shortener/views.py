@@ -1,20 +1,42 @@
 from typing import Any
 from django.http import HttpRequest, HttpResponse
+from django.views.decorators.http import require_POST
+from django.contrib import messages
 from django.shortcuts import (
     render, 
     get_object_or_404, 
-    redirect
+    redirect,
 )
-from django.urls import path
+from django.urls import path, reverse
 from django.views.generic import ListView
+from django.db import IntegrityError
 
 from .models import URL
+from .form import URLForm
 
-def index_view(request):
+def index(request):
+    urls = URL.objects.all()
+    form = URLForm()
+    messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
     return render(
         request,
-        "shortener/index.html"
+        "shortener/index.html",
+        {
+            "urls": urls,
+            "form": form
+        }
     )
+
+@require_POST
+def hash_url(request):
+    form = URLForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
+        return redirect(reverse("shortener:index")) 
+    
+    messages.add_message(request, messages.WARNING, form.errors)
+    return redirect(reverse("shortener:index"))
 
 
 class IndexView(ListView):

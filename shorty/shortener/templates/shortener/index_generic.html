@@ -1,30 +1,41 @@
-{% extends 'shortener/_base.html' %}
-{% block title %}Shortener{% endblock title %}
+{% extends '_base.html' %}
+{% block title %}
+  Shortener
+{% endblock %}
 
-{% block body %}
-<div class="container">
-    <div id="inner">
-    </div>
-</div>
-<div class="container">
-    <table id="url-table">
-        <tr id="url-heading-row">
-            <th>Sr no</th>
-            <th>URL</th>
-            <th>Url Hash</th>
-            <th>Clicks</th>
-            <th>Created</th>
-        </tr>
-        {% comment %} {{ url_list }} {% endcomment %}
-        {% for url in url_list %}
-        <tr class="url-data-row">
-            <td>{{ url.id }}</td>
-            <td>{{ url.full_url|truncatechars:50}}</td>
+{% block app %}
+  <div class="container my-5">
+    <div class="input-group mb-3 input-group-lg">
+        <input id="input-url" type="text" class="form-control" placeholder="URL..." aria-label="URL..." aria-describedby="button-addon2">
+        <button class="btn btn-success px-5" type="button" id="button-addon2">Short</button>
+      </div>
+  </div>
+  {% if urls|length > 0 %}
+  <div class="container">
+    <table class="table table-hover ">
+        <thead class="table-danger">
+          <tr>
+            <th scope="col">Sr.</th>
+            <th scope="col">URL</th>
+            <th scope="col">Hashed</th>
+            <th scope="col">Clicks</th>
+          </tr>
+        </thead>
+        {% for url in urls %}
+        <tbody>
+          <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ url.full_url | truncatechars:80}}</td>
             <td>{{ url.url_hash}}</td>
             <td>{{ url.clicks }}</td>
-            <td>{{ url.created_at|date }}</td>
-        </tr>
+          </tr>
+        </tbody>
         {% endfor %}
-    </table>
-</div>
-{% endblock body %}
+      </table>
+  </div>
+  {% else %}
+    <div class="container">
+        <h1>No Data found!</h1>
+    </div>
+  {% endif %}
+  {% endblock %}

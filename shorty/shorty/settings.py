@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ] + [
-    "graphene_django"
+    "graphene_django",
+    "crispy_forms",
+    "crispy_bootstrap5",
 ] + [
     "shortener.apps.ShortenerConfig",
     "api.apps.ApiConfig",
@@ -62,7 +64,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
-            # os.path.join(BASE_DIR, 'templates')
+            os.path.join(BASE_DIR, 'templates')
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -142,3 +144,9 @@ GRAPHENE = {
     'SCHEMA': 'shorty.schema.schema',
 }
 
+
+
+# CRISPY FORMS
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK = "bootstrap5"

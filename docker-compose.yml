@@ -6,4 +6,5 @@ services:
       context: ./shorty
       dockerfile: Dockerfile
     container_name: backend-url
-    entrypoint: "run.sh"
+    ports:
+      - 8000:8000

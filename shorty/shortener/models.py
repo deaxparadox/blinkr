@@ -7,7 +7,7 @@ from graphql import GraphQLError
 
 class URL(models.Model):
     full_url = models.URLField(unique=True)
-    url_hash = models.URLField(unique=True)
+    url_hash = models.URLField(unique=True, blank=True)
     clicks = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,7 +1,8 @@
 from django.urls import path, include
 
 from .views import (
-    index_view,
+    index,
+    hash_url,
     IndexView,
     root
 )
@@ -9,6 +10,7 @@ from .views import (
 app_name = "shortener"
 
 urlpatterns = [
-    path("", IndexView.as_view(), name="index"),
+    path("", index, name="index"),
     path("redirect/", root, name="root"),
+    path("hash/", hash_url, name='hash')
 ]
