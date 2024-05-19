@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block app %}
-    <div class="container">
-        <h2 class="text-danger my-2 py-2">Hash Form</h2>
+    <div class="container mt-5">
+        {% comment %} <h2 class="text-danger my-2 py-2">URL</h2> {% endcomment %}
         <form action="{% url "shortener:hash" %}" method="post">
             {% csrf_token %}
             {{ form|crispy }}
@@ -26,7 +26,7 @@
   </div> {% endcomment %}
   {% if urls|length > 0 %}
     <div class="container">
-      <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">History</h2>
+      <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">Latest</h2>
       <table class="table table-hover">
         <thead class="table-danger">
           <tr>

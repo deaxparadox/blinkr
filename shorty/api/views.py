@@ -3,8 +3,10 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
+from django.shortcuts import render
 
 from django.db.models import QuerySet
+from django.db import DatabaseError
 
 from .serializers import URLSerializer, HashURLSerializer
 from shortener.models import URL
@@ -12,21 +14,27 @@ from shortener.models import URL
 @api_view(["GET"])
 def index(request):
     """
-    Retreive `q` (url_hash) form path, and return the original url.
+    if `q` is None, then return all urls, default to `all`
+    
+    if `q` is url hash, return original url of url.
     """
     hash = request.GET.get("q", None)
-    # print(f"\nhash: {hash}\n")
-    if not hash:
+    
+    if not hash or hash == "all":
+        urls = URL.objects.all()
+        serializer = URLSerializer(urls, many=True)
         return Response(
-            {}, 
+            serializer.data, 
             status=status.HTTP_204_NO_CONTENT
         )
+    
     query_set: URL|None = None
     try:
         query_set = URL.objects.get(url_hash=hash)
-    except:
+    except URL.DoesNotExist as e:
+        print(str(e), type(e))
         return Response(
-            {},
+            {"error": str(e)},
             status=status.HTTP_204_NO_CONTENT
         )
     serializer = URLSerializer(query_set)
@@ -70,14 +78,19 @@ def create(request):
             )
         except Exception as e:
             return Response(
-                {},
+                { "error": str(e) },
                 status=status.HTTP_406_NOT_ACCEPTABLE
             )
-    else:
-        return Response(
-            {
-                "error": "Invalid data"
-            }, 
-            status=status.HTTP_400_BAD_REQUEST
-        )
-    return Response({}, status=status.HTTP_201_CREATED)
+    return Response(
+        {
+            "error": "Invalid data"
+        }, 
+        status=status.HTTP_400_BAD_REQUEST
+    )
+
+
+def endpoints_view(request):
+    return render(
+        request,
+        "api/index.html"
+    )

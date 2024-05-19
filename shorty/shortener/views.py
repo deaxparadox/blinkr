@@ -11,7 +11,7 @@ from django.urls import path, reverse
 from django.views.generic import ListView
 from django.db import IntegrityError
 
-from .models import URL
+from .models import URL, URLEncodeMedium
 from .form import URLForm
 
 def index(request):
@@ -34,7 +34,12 @@ def index(request):
 def hash_url(request):
     form = URLForm(request.POST)
     if form.is_valid():
-        form.save()
+        # Update `medium` field of medium
+        model: URL = form.save(commit=False)
+        model.medium = URLEncodeMedium.NORMAL
+        model.save()
+        
+
         messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
         return redirect(reverse("shortener:index")) 
     
@@ -72,3 +77,31 @@ def history(request):
             "urls": urls
         }
     )
+    
+@require_GET
+def view_search(request):
+    q = request.GET.get("q", None)
+    urls = None
+    if q:
+        # print(q)
+        # print(q.strip().split(" "))
+        # print(type(q))
+        
+        urls = URL.objects.all().order_by("-created_at")
+        for k in q.split(" "):
+            urls = urls.filter(full_url__contains=k)
+        
+        return render(
+            request,
+            "shortener/search.html",
+            {
+                "urls": urls,
+            }
+        )
+    return render(
+            request,
+            "shortener/search.html",
+            {
+                "urls": urls,
+            }
+        )

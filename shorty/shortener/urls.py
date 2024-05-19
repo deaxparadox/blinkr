@@ -5,12 +5,14 @@ from .views import (
     hash_url,
     IndexView,
     access,
-    history
+    history,
+    view_search
 )
 
 app_name = "shortener"
 
 urlpatterns = [
+    path("search/", view_search, name="search"),
     path("hash/", hash_url, name='hash'),
     path("history/", history, name='history'),
     path("<str:url_hash>/", access, name="access"),

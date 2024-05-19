@@ -1,0 +1,50 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block app %}
+
+
+
+<div class="container mt-5">
+    <div class='container-fluid d-flex justify-content-center border border-1 border-top-0 border-start-0 border-end-0 border-danger'>
+        <h2 class="text-danger mb-3">API Endpoints</h2>
+    </div>
+
+    <table class="table table-hover">
+        <thead class="table-dark">
+          <tr>
+            <th scope="col">Description</th>
+            <th scope="col">Endpoint</th>
+            <th scope="col">Copy</th>
+          </tr>
+        </thead>
+        <tbody class="">
+          <tr>
+            <td>Get URL of Hash</td>
+            <td class='fw-bolder'>{% url "shortener_api:index" %}?q=hash</td>
+            <td><button  class='copy-button  btn btn-sm m-0 p-0 px-3 btn-secondary'>Copy</button></td>
+          </tr>
+          <tr>
+            <td>Get all URLs with Hashes</td>
+            <td class='fw-bolder'>{% url "shortener_api:index" %}?q=all</td>
+            <td><button  class='copy-button  btn btn-sm m-0 p-0 px-3 btn-secondary'>Copy</button></td>
+          </tr>
+          <tr>
+            <td>Get all URLs with Hashes</td>
+            <td class='fw-bolder'>{% url "shortener_api:index" %}</td>
+            <td><button  class='copy-button  btn btn-sm m-0 p-0 px-3 btn-secondary'>Copy</button></td>
+          </tr>
+          <tr>
+            <td>Hash your URLs</td>
+            <td class='fw-bolder'>{% url "shortener_api:create" %}</td>
+            <td><button  class='copy-button  btn btn-sm m-0 p-0 px-3 btn-secondary'>Copy</button></td>
+          </tr>
+        </tbody>
+      </table>
+</div>
+
+
+{% endblock app %}
+
+{% block js %}
+    <script type="module" src="{% static 'api/index.js' %}"></script>
+{% endblock js %}

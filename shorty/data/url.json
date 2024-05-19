@@ -1,0 +1,167 @@
+[
+    {
+        "model": "shortener.url",
+        "pk": 1,
+        "fields": {
+            "full_url": "https://www.linkedin.com/pulse/unveiling-magic-github-profile-repositories-himal-geethanjana-9e0ec",
+            "url_hash": "8bd1f63607",
+            "clicks": 0,
+            "created_at": "2024-05-19T12:10:44.000Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 2,
+        "fields": {
+            "full_url": "https://www.shine.com/blog/profile-summary-freshers-examples",
+            "url_hash": "edb5da133b",
+            "clicks": 1,
+            "created_at": "2024-05-19T12:11:03.218Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 3,
+        "fields": {
+            "full_url": "https://www.kaggle.com/code/akmal1995/multi-linear-regression-eda-car-price-prediction#Basic-EDA",
+            "url_hash": "50be67df4a",
+            "clicks": 0,
+            "created_at": "2024-05-19T14:30:52.000Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 4,
+        "fields": {
+            "full_url": "https://numba.readthedocs.io/en/stable/user/5minguide.html",
+            "url_hash": "d1505c6036",
+            "clicks": 0,
+            "created_at": "2024-05-19T14:46:30.200Z",
+            "medium": 2
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 5,
+        "fields": {
+            "full_url": "https://docs.djangoproject.com/en/5.0/ref/models/fields/",
+            "url_hash": "789e935989",
+            "clicks": 0,
+            "created_at": "2024-05-19T14:57:18.255Z",
+            "medium": 2
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 6,
+        "fields": {
+            "full_url": "https://stackoverflow.com/questions/16181188/django-doesnotexist",
+            "url_hash": "d44297cd87",
+            "clicks": 0,
+            "created_at": "2024-05-19T15:05:51.053Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 7,
+        "fields": {
+            "full_url": "https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript",
+            "url_hash": "68c996c73c",
+            "clicks": 0,
+            "created_at": "2024-05-19T15:07:59.281Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 8,
+        "fields": {
+            "full_url": "https://towardsdatascience.com/the-complete-guide-to-linear-regression-analysis-38a421a89dc2",
+            "url_hash": "4576fc9285",
+            "clicks": 0,
+            "created_at": "2024-05-19T15:39:41.823Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 9,
+        "fields": {
+            "full_url": "https://nptel.ac.in/courses",
+            "url_hash": "dcced5e299",
+            "clicks": 0,
+            "created_at": "2024-05-19T15:39:54.016Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 10,
+        "fields": {
+            "full_url": "https://www.khanacademy.org/math/linear-algebra/vectors-and-spaces/vectors/v/vector-introduction-linear-algebra",
+            "url_hash": "d550ac3689",
+            "clicks": 0,
+            "created_at": "2024-05-19T16:51:33.342Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 11,
+        "fields": {
+            "full_url": "https://towardsdatascience.com/a-thorough-guide-to-time-series-analysis-5439c63bc9c5",
+            "url_hash": "34595254a6",
+            "clicks": 0,
+            "created_at": "2024-05-19T16:51:44.163Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 12,
+        "fields": {
+            "full_url": "https://developer.mozilla.org/en-US/docs/Web/API/Element/mouseover_event",
+            "url_hash": "675e75518e",
+            "clicks": 0,
+            "created_at": "2024-05-19T16:51:58.926Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 13,
+        "fields": {
+            "full_url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter",
+            "url_hash": "f290755fdd",
+            "clicks": 0,
+            "created_at": "2024-05-19T16:52:11.850Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 14,
+        "fields": {
+            "full_url": "https://stackoverflow.com/questions/56107259/how-to-save-a-trained-model-by-scikit-learn",
+            "url_hash": "b28f4f3282",
+            "clicks": 0,
+            "created_at": "2024-05-19T16:57:14.246Z",
+            "medium": 1
+        }
+    },
+    {
+        "model": "shortener.url",
+        "pk": 15,
+        "fields": {
+            "full_url": "https://stackoverflow.com/questions/78503316/sql-difference-function-not-working-with-hebrew-text",
+            "url_hash": "4d471cc742",
+            "clicks": 0,
+            "created_at": "2024-05-19T16:57:38.352Z",
+            "medium": 1
+        }
+    }
+]
