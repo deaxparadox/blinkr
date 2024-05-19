@@ -7,23 +7,6 @@
 {% endblock %}
 
 {% block app %}
-    <div class="container">
-        <h2 class="text-danger my-2 py-2">Hash Form</h2>
-        <form action="{% url "shortener:hash" %}" method="post">
-            {% csrf_token %}
-            {{ form|crispy }}
-            <div class="container-fluid d-flex justify-content-end">
-                <input type="submit" value="Submit" class="btn btn-lg btn-success px-5">
-            </div>
-        </form>
-    </div>
-  {% comment %} <div class="container my-5">
-    <h2 class="text-danger my-2 py-2">Encode</h2>
-    <div class="input-group mb-3 input-group-lg">
-      <input id="input-url" type="text" class="form-control" placeholder="URL..." aria-label="URL..." aria-describedby="button-addon2" />
-      <button id="input-button" class="btn btn-success px-5" type="button" id="button-addon2">Short</button>
-    </div>
-  </div> {% endcomment %}
   {% if urls|length > 0 %}
     <div class="container">
       <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">History</h2>

@@ -4,13 +4,15 @@ from .views import (
     index,
     hash_url,
     IndexView,
-    root
+    access,
+    history
 )
 
 app_name = "shortener"
 
 urlpatterns = [
+    path("hash/", hash_url, name='hash'),
+    path("history/", history, name='history'),
+    path("<str:url_hash>/", access, name="access"),
     path("", index, name="index"),
-    path("redirect/", root, name="root"),
-    path("hash/", hash_url, name='hash')
 ]

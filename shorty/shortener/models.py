@@ -2,6 +2,7 @@ from hashlib import md5
 from django.db import models
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.urls import reverse
 
 from graphql import GraphQLError
 
@@ -10,6 +11,10 @@ class URL(models.Model):
     url_hash = models.URLField(unique=True, blank=True)
     clicks = models.IntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def get_absolute_url(self):
+        return reverse("shortener:access", kwargs={"url_hash": self.url_hash})
+    
 
     def clicked(self):
         self.clicks +=1
