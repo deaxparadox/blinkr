@@ -40,5 +40,5 @@ urlpatterns = [
     # GraphQL path
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="shortener_graphql"),
 ] + [
-    path('admin/', admin.site.urls),   
+    path('hidden/admin/', admin.site.urls),   
 ]
