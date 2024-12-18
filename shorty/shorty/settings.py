@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "shortener.apps.ShortenerConfig",
     "api.apps.ApiConfig",
     "gql.apps.GqlConfig",
+    "authentication.apps.AuthenticationConfig",
 ]
 
 MIDDLEWARE = [
@@ -147,6 +148,5 @@ GRAPHENE = {
 
 
 # CRISPY FORMS
-
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"

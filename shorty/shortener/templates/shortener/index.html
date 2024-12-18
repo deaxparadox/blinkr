@@ -6,8 +6,8 @@
   Shortener
 {% endblock %}
 
-{% block app %}
-    <div class="container mt-5">
+{% block content %}
+    <div class="container">
         {% comment %} <h2 class="text-danger my-2 py-2">URL</h2> {% endcomment %}
         <form action="{% url "shortener:hash" %}" method="post">
             {% csrf_token %}

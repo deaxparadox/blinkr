@@ -24,3 +24,16 @@ table {
 
     margin-top: 10px;
 } */
+
+/* .content-box {
+    background-color: rgb(241, 241, 237);
+    border-left: 1px solid rgb(216, 216, 216);
+    border-right: 1px solid rgb(216, 216, 216);
+} */
+
+.message-toast {
+    position: fixed;
+    /* left: 80%; */
+    right: 50px;
+    bottom: 20px;
+}

@@ -3,7 +3,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_exempt
 from django.db import IntegrityError
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.urls import reverse
 
 from django.db.models import QuerySet
 from django.db import DatabaseError
@@ -90,7 +91,9 @@ def create(request):
 
 
 def endpoints_view(request):
-    return render(
-        request,
-        "api/index.html"
-    )
+    if request.user.is_authenticated:    
+        return render(
+            request,
+            "api/index.html"
+        )
+    return redirect(reverse("authentication:login"))

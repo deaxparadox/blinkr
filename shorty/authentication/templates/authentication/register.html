@@ -1,0 +1,45 @@
+
+{% extends "_base.html" %}
+
+{% load static %}
+
+{# Load crispy forms #}
+{% load crispy_forms_tags %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static "authentication/css/register.css" %}">
+{% endblock css %}
+
+{% block title %}Register{% endblock title %}
+
+{# Content block  #}
+{% block content %}
+
+<div class="container">
+
+    <div class="container-register">
+        <div class="box-register">
+            <div class="register-heading text-center bg-warning mb-5">
+                <h3 class="p-3">Register</h3>
+            </div>
+            <ul id="register-username-suggestion-box"></ul>
+            <form action="{% url "authentication:register" %}" method="post">
+                {% csrf_token %}
+                {{ register_form|crispy }}
+                <div class="container-fluid d-flex justify-content-center mt-5">
+                    <input type="submit" value="Submit" class="btn btn-lg btn-success px-5 register-button">
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+
+{% endblock content %}
+
+
+{% block js %}
+    <script src="{% static "authentication/js/suggest_username.js" %}"></script>
+{% endblock js %}

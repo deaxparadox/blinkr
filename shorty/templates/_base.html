@@ -13,8 +13,14 @@
 <body>
     
     {% include "include/navbar.html" %}
+    
+    {% if user.is_authenticated %}
+        {% include "include/tabs.html" %}
+    {% endif %}
 
-    {% block app %}{% endblock app %}
+    <div class="container content-box">
+        {% block content %}{% endblock content %}
+    </div>
 
     {% include "include/message.html" %}
     

@@ -24,33 +24,19 @@ from .views import index_view
 
 urlpatterns = [
     
-    path("", index_view, name="index"),
     
     path(
-        "shortener/", 
+        "v1/", 
         include([
             path("api/", include("api.urls", namespace="api")),
+            path("auth/", include("authentication.urls", namespace="authentication")),
             path("", include("shortener.urls", namespace="shortener")),
+            
         ])
     ),
-    
-    
-    
-    # path(
-    #     "",
-    #     include([
-    #         path("", index_view, name="index"),
-    #         path("shortener/", include("shortener.urls", namespace="shortener")),
-    #     ])
-    # ),
-    # path(
-    #     "api/",
-    #     include([
-    #         path("", index_view, name="index"),
-    #         path("shortener/", include("shortener.api.urls", namespace="shortener_api")),
-    #     ])
-    # ),
 
+    path("", index_view, name="index"),
+    
     # GraphQL path
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="shortener_graphql"),
 ] + [

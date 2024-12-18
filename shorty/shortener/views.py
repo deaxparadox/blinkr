@@ -14,24 +14,38 @@ from django.db import IntegrityError
 from .models import URL, URLEncodeMedium
 from .form import URLForm
 
-def index(request):
-    urls = URL.objects.all().order_by("-created_at")
-    if len(urls) > 5:
-        urls = urls[:5]
-        
-    form = URLForm()
-    messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
-    return render(
-        request,
-        "shortener/index.html",
-        {
-            "urls": urls,
-            "form": form
-        }
-    )
 
+# Index view
+# 
+# This view will be rendered to the logged in user.
+# Display 5 latest hashed urls and a form to hash a
+# new url
+# 
+def index_view(request):
+    if request.user.is_authenticated:
+        urls = URL.objects.all().order_by("-created_at")
+        if len(urls) > 5:
+            urls = urls[:5]
+            
+        form = URLForm()
+        messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
+        return render(
+            request,
+            "shortener/index.html",
+            {
+                "urls": urls,
+                "form": form
+            }
+        )
+    return redirect(reverse("authentication:login"))
+
+
+# Hash url view
+# 
+# This url will receive a request with original url,
+# to hash it. And will return up to Index view.
 @require_POST
-def hash_url(request):
+def hash_url_view(request):
     form = URLForm(request.POST)
     if form.is_valid():
         # Update `medium` field of medium
@@ -52,7 +66,7 @@ class IndexView(ListView):
     template_name = "shortener/index_generic.html"
 
 
-def access(request, url_hash: str|None = None):
+def access_view(request, url_hash: str|None = None):
     """
     This receives an argument called `url_hash` from the `URL` requested by a user. Inside the function, the first line tries to get the URL from the database using the `url_hash` argument. If not found, it returns the HTTP 404 error to the client, which means that the resource is missing. Afterwards, it increments the `clicked` property of the URL   entry, making sure to track how many times the URL is accessed. At the end, it redirects the client to the requested URL.
 
@@ -68,7 +82,7 @@ def access(request, url_hash: str|None = None):
 
 
 @require_GET
-def history(request):
+def history_view(request):
     urls = URL.objects.all().order_by("-created_at")
     return render(
         request,
@@ -79,7 +93,7 @@ def history(request):
     )
     
 @require_GET
-def view_search(request):
+def view_search_view(request):
     q = request.GET.get("q", None)
     urls = None
     if q:
