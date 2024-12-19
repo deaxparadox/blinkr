@@ -6,24 +6,32 @@ from django.contrib import messages
 import logging
 
 from . import forms
+from .models import Authentication, Setting
+from shortener.models import URL
 
 
 
-log_enable = False
+
+
 logger = logging.getLogger(__name__)
+log_enable = False
 
+# Shortcut for logging
 def shortcut_logger(message, level = "Warning"):
     if log_enable:
         if level == "Warning":
             logger.warning(message)
         return 
     
-    
+
+# Shortcut for messaging
 message_enable = True
 def shortcut_message(_request, level=messages.INFO, message: str = None):
     if message_enable:
         messages.add_message(_request, level, message)
 
+
+# Shortcut for register view
 def shortcut_register_view(request, message:str = None, pre_data=None):
     if message is not None:
         shortcut_message(request, message=message)
@@ -39,6 +47,9 @@ def shortcut_register_view(request, message:str = None, pre_data=None):
         }
     )
 
+
+# Short for rederning login view
+# 
 def shortcut_login_view(request, message:str = None, pre_data=None):
     
     # If message is passed.
@@ -131,8 +142,11 @@ def register_view(request):
                 try:
                     # registering new user
                     new_user = User.objects.create_user(username=username, password=password1)
+                    new_setting = Setting.objects.create()
+                    Authentication.objects.create(user=new_user, setting=new_setting)
                     
                     shortcut_logger("New user created.")
+                    
                 except Exception(e) as e:
                     shortcut_logger("Error while creating new user.")
                     

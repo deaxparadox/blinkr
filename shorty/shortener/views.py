@@ -11,6 +11,7 @@ from django.urls import path, reverse
 from django.views.generic import ListView
 from django.db import IntegrityError
 
+from authentication.models import Authentication, Setting
 from .models import URL, URLEncodeMedium
 from .form import URLForm
 
@@ -23,7 +24,7 @@ from .form import URLForm
 # 
 def index_view(request):
     if request.user.is_authenticated:
-        urls = URL.objects.all().order_by("-created_at")
+        urls = URL.objects.all().order_by("-created")
         if len(urls) > 5:
             urls = urls[:5]
             
@@ -40,22 +41,52 @@ def index_view(request):
     return redirect(reverse("authentication:login"))
 
 
+# Dashboard view
+# 
+# This view will be rendered to the logged in user.
+# Display 5 latest hashed urls and a form to hash a
+# new url
+# 
+def dashboard_view(request):
+    # Check the request authentication.
+    if request.user.is_authenticated:
+        urls = URL.objects.all().order_by("-created")
+        if len(urls) > 5:
+            urls = urls[:5]
+            
+        form = URLForm()
+        messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
+        return render(
+            request,
+            "shortener/dashboard.html",
+            {
+                "urls": urls,
+                "form": form
+            }
+        )
+    return redirect(reverse("authentication:login"))
+
+
+
+
+
 # Hash url view
 # 
 # This url will receive a request with original url,
 # to hash it. And will return up to Index view.
 @require_POST
 def hash_url_view(request):
-    form = URLForm(request.POST)
-    if form.is_valid():
-        # Update `medium` field of medium
-        model: URL = form.save(commit=False)
-        model.medium = URLEncodeMedium.NORMAL
-        model.save()
-        
+    if request.user.is_authenticated():
+        form = URLForm(request.POST)
+        if form.is_valid():
+            # Update `medium` field of medium
+            model: URL = form.save(commit=False)
+            model.medium = URLEncodeMedium.NORMAL
+            model.save()
+            
 
-        messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
-        return redirect(reverse("shortener:index")) 
+            messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
+            return redirect(reverse("shortener:index")) 
     
     messages.add_message(request, messages.WARNING, form.errors)
     return redirect(reverse("shortener:index"))

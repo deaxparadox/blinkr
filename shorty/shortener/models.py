@@ -3,10 +3,15 @@ from django.db import models
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.urls import reverse
-
 from django.utils.translation import gettext_lazy as _
-
 from graphql import GraphQLError
+
+from authentication.models import Authentication
+
+
+class VisibilityChoices(models.IntegerChoices):
+    PRIVATE = 0, _("No")
+    PUBLIC = 1, _("Yes")
 
 
 class URLEncodeMedium(models.IntegerChoices):
@@ -14,12 +19,40 @@ class URLEncodeMedium(models.IntegerChoices):
     API = 2, _("API")
     GRAPHQL = 3, _("GraphQL")
     
+
 class URL(models.Model):
-    full_url = models.URLField(unique=True)
-    url_hash = models.URLField(unique=True, blank=True)
-    clicks = models.IntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
+    full_url = models.URLField(unique=True)                         # Original URL
+    url_hash = models.URLField(unique=True, blank=True)             # Hashed URL
+    clicks = models.IntegerField(default=0)                         # Total access count.
+    created = models.DateTimeField(auto_now_add=True)               # Creation time.
+    
+    # Medium through which the Hash it created.
     medium = models.IntegerField(choices=URLEncodeMedium)
+    
+    # Activate or deactivate a URL
+    active = models.BooleanField(default=True)
+    
+    # Delete the URLs
+    delete = models.BooleanField(default=False)
+    
+    # Set visibility of the URLs,
+    # If visibility is set to PUBLIC, a URL will be
+    # available on the dashboard, else if the 
+    # visibility is set to PRIVATE, it will displayed
+    # to the owner in dashboard.
+    visibility = models.IntegerField(
+        default=VisibilityChoices.PUBLIC, 
+        choices=VisibilityChoices, 
+        help_text="Set visiblity of the Hashed URL."
+    )
+    
+    authentication = models.ForeignKey(
+        Authentication,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="url"
+    )
     
     def medium_name(self):
         return URLEncodeMedium(self.medium).name

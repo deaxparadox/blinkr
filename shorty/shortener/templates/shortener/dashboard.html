@@ -1,0 +1,60 @@
+{% extends '_base.html' %}
+{% load crispy_forms_tags %}
+
+{% load static %}
+{% block title %}
+  Shortener
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {% comment %} <h2 class="text-danger my-2 py-2">URL</h2> {% endcomment %}
+        <form action="{% url "shortener:hash" %}" method="post">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="container-fluid d-flex justify-content-end">
+                <input type="submit" value="Submit" class="btn btn-lg btn-success px-5">
+            </div>
+        </form>
+    </div>
+  {% comment %} <div class="container my-5">
+    <h2 class="text-danger my-2 py-2">Encode</h2>
+    <div class="input-group mb-3 input-group-lg">
+      <input id="input-url" type="text" class="form-control" placeholder="URL..." aria-label="URL..." aria-describedby="button-addon2" />
+      <button id="input-button" class="btn btn-success px-5" type="button" id="button-addon2">Short</button>
+    </div>
+  </div> {% endcomment %}
+  {% if urls|length > 0 %}
+    <div class="container">
+      <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">Latest</h2>
+      <table class="table table-hover">
+        <thead class="table-danger">
+          <tr>
+            <th scope="col">Sr.</th>
+            <th scope="col">URL</th>
+            <th scope="col">Hashed</th>
+            <th scope="col">Clicks</th>
+          </tr>
+        </thead>
+        {% for url in urls %}
+          <tbody>
+            <tr>
+              <th scope="row">{{ forloop.counter }}</th>
+              <td>{{ url.full_url|truncatechars:80 }}</td>
+              <td><a href="{{ url.get_absolute_url }}" target="_blank" rel="noopener noreferrer">{{ url.url_hash }}</a></td>
+              <td>{{ url.clicks }}</td>
+            </tr>
+          </tbody>
+        {% endfor %}
+      </table>
+    </div>
+  {% else %}
+    <div class="container">
+      <h1>No Data found!</h1>
+    </div>
+  {% endif %}
+{% endblock %}
+
+{% block js %}
+  <script src="{% static 'shortener/base.js' %}" type="module"></script>
+{% endblock %}
