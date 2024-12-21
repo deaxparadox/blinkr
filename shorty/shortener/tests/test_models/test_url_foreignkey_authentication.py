@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 
 
 from authentication.models import Authentication, Setting
-from ..models import URL, URLEncodeMedium
+from shortener.models import URL, URLEncodeMedium
 
         
 # URL models has ForeignKey to authentication.
