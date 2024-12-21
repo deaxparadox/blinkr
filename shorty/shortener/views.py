@@ -48,7 +48,6 @@ def index_view(request):
 # new url
 # 
 def dashboard_view(request):
-    # Check the request authentication.
     if request.user.is_authenticated:
         urls = URL.objects.all().order_by("-created")
         if len(urls) > 5:
@@ -74,9 +73,10 @@ def dashboard_view(request):
 # 
 # This url will receive a request with original url,
 # to hash it. And will return up to Index view.
+# 
 @require_POST
 def hash_url_view(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         form = URLForm(request.POST)
         if form.is_valid():
             # Update `medium` field of medium
@@ -88,8 +88,11 @@ def hash_url_view(request):
             messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
             return redirect(reverse("shortener:index")) 
     
-    messages.add_message(request, messages.WARNING, form.errors)
-    return redirect(reverse("shortener:index"))
+        messages.add_message(request, messages.WARNING, form.errors)
+        return redirect(reverse("shortener:index"))
+    
+    else:
+        return redirect(reverse("authenication:login"))
 
 
 class IndexView(ListView):

@@ -6,7 +6,7 @@ class TestURLModel(TestCase):
     def setUp(self):
         self.new_url = URL.objects.create(full_url="https://google.com/1", medium=URLEncodeMedium.NORMAL)
         
-    def test_url_instance_default_value(self):
+    def test_new_url_instance(self):
         self.assertEqual(self.new_url.active, True)
         self.assertEqual(self.new_url.delete, False)
         self.assertEqual(self.new_url.clicks, 0)

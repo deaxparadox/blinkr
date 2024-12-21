@@ -22,6 +22,7 @@ class URLForeignKeyTest(TestCase):
         
         new_auth.url.add(new_url1)
         new_auth.url.add(new_url2)
+        
         new_auth.save()
         
         self.assertEqual(len(new_auth.url.all()), 2)

@@ -1,8 +1,9 @@
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_list_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
+from django.http import HttpResponseRedirect, Http404
 import logging
 
 from . import forms
@@ -14,14 +15,14 @@ from shortener.models import URL
 
 
 logger = logging.getLogger(__name__)
-log_enable = False
+# log_enable = True
 
 # Shortcut for logging
 def shortcut_logger(message, level = "Warning"):
-    if log_enable:
-        if level == "Warning":
-            logger.warning(message)
-        return 
+    global logger
+    # if level == "Warning":
+    logger.warning(message)
+    # return 
     
 
 # Shortcut for messaging
@@ -33,12 +34,24 @@ def shortcut_message(_request, level=messages.INFO, message: str = None):
 
 # Shortcut for register view
 def shortcut_register_view(request, message:str = None, pre_data=None):
+    """
+    This function is shortcut for generating register response, with message and 
+    registration details.
+    
+    - message: Pass a message to display to user.
+    
+    - pre_data: This argument should only be used, 
+    if login failed, then return the pre-filled details 
+    in reponse except password.
+    """
     if message is not None:
         shortcut_message(request, message=message)
+        
     if pre_data is not None:
         register_form = forms.RegisterForm(pre_data)
     else:
         register_form = forms.RegisterForm()
+        
     return render(
         request,
         "authentication/register.html",
@@ -49,8 +62,18 @@ def shortcut_register_view(request, message:str = None, pre_data=None):
 
 
 # Short for rederning login view
-# 
 def shortcut_login_view(request, message:str = None, pre_data=None):
+    """
+    This function is shortcut for generating login response, with message and 
+    login details.
+    
+    - message: Pass a message to display to user.
+    
+    - pre_data: This argument should only be used, 
+    if login failed, then return the pre-filled details 
+    in reponse except password.
+    """
+    
     
     # If message is passed.
     if message is not None:
@@ -101,8 +124,8 @@ def login_view(request):
             else:
                 # If user is not authenticated,
                 # redirect to login.
-                return shortcut_login_view(request, message="Invalid username or password.", data=request.POST)
-                return redirect(reverse("authentication:login"))
+                return shortcut_login_view(request, message="Invalid username or password.", pre_data=request.POST)
+                # return redirect(reverse("authentication:login"))
         else:
             # If login data is invalid return login page.
             return shortcut_login_view(request, message="Invalid username or password.", instance=login_form_data)
@@ -110,6 +133,18 @@ def login_view(request):
     
     return shortcut_login_view(request)
 
+
+
+def check_existing_object(KClass = None, username: str = None) -> bool:
+    """
+    This function check user existence, if user exists 
+    return True else return False.
+    """
+    try:
+        get_list_or_404(klass=KClass, username=username)
+    except Http404:
+        return False
+    return True
 
 # Register view, register the new user.
 def register_view(request):
@@ -131,21 +166,31 @@ def register_view(request):
             password1 = register_form_data.cleaned_data['password1']
             password2 = register_form_data.cleaned_data['password2']
             
+            # Checking existing user.
+            if check_existing_object(User, username=username):
+                shortcut_message(request, message="User already exists.")
+                return redirect(reverse("authentication:login"))
+            
             # If both password are same,
             # proceed to next step.
-            if password1 == password2:
+            if (
+                password1 == password2 or
+                username != " " or
+                username != "" or 
+                username is not None
+            ):
                 shortcut_logger("Password1 and password2 matched.")
                 
-                # Create new user, if any exception is raise,
-                # return register page.
-                # 
+                # Create new user.
+                # If any exception is raise,
+                # return to registration page.
                 try:
                     # registering new user
                     new_user = User.objects.create_user(username=username, password=password1)
                     new_setting = Setting.objects.create()
                     Authentication.objects.create(user=new_user, setting=new_setting)
                     
-                    shortcut_logger("New user created.")
+                    shortcut_logger("User registered.")
                     
                 except Exception(e) as e:
                     shortcut_logger("Error while creating new user.")
@@ -158,7 +203,9 @@ def register_view(request):
                 
                 # if user is successfull register,
                 # return to login page.
-                return shortcut_login_view(request)
+                shortcut_message(request, message="User successfully registered.")
+                return redirect(reverse("authentication:login"))
+                # return HttpResponseRedirect(reverse("authentication:login"))
             
             else:
                 # If password1 and password doesnot match.
@@ -167,7 +214,7 @@ def register_view(request):
             
         # If register form is invalid, 
         # go to register page.
-        return redirect(reverse("authentication:register"))
+        return shortcut_register_view(request, message="Password doesn't matched", pre_data=request.POST)
     
     shortcut_logger("GET request")
     return shortcut_register_view(request)

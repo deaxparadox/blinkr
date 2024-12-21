@@ -151,3 +151,31 @@ GRAPHENE = {
 # CRISPY FORMS
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+#
+# SESSION CONFIGURATION
+#
+# Age of cookie, iS 1 day .
+SESSION_COOKIE_AGE = 60 * 60 * 24
+
+
+# 
+# LOGGING CONFIGURATION
+# 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "authentication.views": {}
+    }
+}

@@ -20,6 +20,12 @@ class URLEncodeMedium(models.IntegerChoices):
     GRAPHQL = 3, _("GraphQL")
     
 
+def hash_url(url: str = None) -> str:
+    """
+    This function encode the long url in short 10 characters.
+    """
+    return md5(url.encode()).hexdigest()[:10]
+
 class URL(models.Model):
     full_url = models.URLField(unique=True)                         # Original URL
     url_hash = models.URLField(unique=True, blank=True)             # Hashed URL
@@ -46,6 +52,7 @@ class URL(models.Model):
         help_text="Set visiblity of the Hashed URL."
     )
     
+    # Many to one relation to Authencation Models.
     authentication = models.ForeignKey(
         Authentication,
         on_delete=models.SET_NULL,
@@ -66,7 +73,7 @@ class URL(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id:
-            self.url_hash = md5(self.full_url.encode()).hexdigest()[:10]
+            self.url_hash = hash_url(self.full_url)
 
         """
         First, this code instantiates the `URLValidator` 
