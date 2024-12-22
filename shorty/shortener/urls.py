@@ -19,5 +19,5 @@ urlpatterns = [
     path("hash/", hash_url_view, name='hash'),
     path("history/", history_view, name='history'),
     path("<str:url_hash>/", access_view, name="access"),
-    path("", index_view, name="index"),
+    # path("", index_view, name="index"),
 ]

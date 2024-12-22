@@ -9,5 +9,10 @@ def index_view(request):
     else:
         return redirect(reverse("authentication:login"))
 
-# class IndexView(ListView):
-#     model: URL
+
+def error_404(request):
+    return render(request, "404.html", {})
+
+
+def error_500(request):
+    return render(request, "500.html", {})

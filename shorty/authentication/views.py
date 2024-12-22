@@ -95,6 +95,17 @@ def shortcut_login_view(request, message:str = None, pre_data=None):
     )
 
 
+def check_existing_object(KClass = None, username: str = None) -> bool:
+    """
+    This function check user existence, if user exists 
+    return True else return False.
+    """
+    try:
+        get_list_or_404(klass=KClass, username=username)
+    except Http404:
+        return False
+    return True
+
 
 # Login view
 def login_view(request):
@@ -111,6 +122,13 @@ def login_view(request):
             username = login_form_data.cleaned_data['username']
             password = login_form_data.cleaned_data['password']
             
+            # Check user existence, if user does not exist,
+            # redirect to register page.
+            if not check_existing_object(User, username=username):
+                shortcut_message(request, message="User not registered.")
+                return redirect(reverse("authentication:register"))
+            
+            
             # Authenticate the login user.
             user = authenticate(request, username=username, password=password)
             
@@ -120,7 +138,7 @@ def login_view(request):
                 # login and redirect to index page.
                 login(request, user)
                 shortcut_message(request, messages.INFO, message="Login successfull.")
-                return redirect(reverse("shortener:index"))
+                return redirect(reverse("shortener:dashboard"))
             else:
                 # If user is not authenticated,
                 # redirect to login.
@@ -135,16 +153,7 @@ def login_view(request):
 
 
 
-def check_existing_object(KClass = None, username: str = None) -> bool:
-    """
-    This function check user existence, if user exists 
-    return True else return False.
-    """
-    try:
-        get_list_or_404(klass=KClass, username=username)
-    except Http404:
-        return False
-    return True
+
 
 # Register view, register the new user.
 def register_view(request):
@@ -162,59 +171,59 @@ def register_view(request):
         if register_form_data.is_valid():
             shortcut_logger("Valid user registration data")
             
-            username = register_form_data.cleaned_data['username']
-            password1 = register_form_data.cleaned_data['password1']
-            password2 = register_form_data.cleaned_data['password2']
+            username: str = register_form_data.cleaned_data['username']
+            password1: str = register_form_data.cleaned_data['password1']
+            password2: str = register_form_data.cleaned_data['password2']
+            
+            # Lowercase the username and validate username.
+            if (username == " " or username == "" or username is None):
+                return shortcut_register_view(request, message="Invalid username.", pre_data=request.POST)
+            try:
+                username = username.lower()
+            except Exception as e:
+                return shortcut_register_view(request, message="Invalid username.", pre_data=request.POST)
+            
+            
+            # Check both password1 and password.
+            if password1 != password2:
+                return shortcut_register_view(request, message="Password doesn't matched", pre_data=request.POST)
+            
             
             # Checking existing user.
             if check_existing_object(User, username=username):
                 shortcut_message(request, message="User already exists.")
                 return redirect(reverse("authentication:login"))
             
-            # If both password are same,
-            # proceed to next step.
-            if (
-                password1 == password2 or
-                username != " " or
-                username != "" or 
-                username is not None
-            ):
-                shortcut_logger("Password1 and password2 matched.")
+
+            # Create new user.
+            # If any exception is raise,
+            # return to registration page.
+            try:
+                # registering new user
+                new_user = User.objects.create_user(username=username, password=password1)
+                new_setting = Setting.objects.create()
+                Authentication.objects.create(user=new_user, setting=new_setting)
                 
-                # Create new user.
-                # If any exception is raise,
-                # return to registration page.
-                try:
-                    # registering new user
-                    new_user = User.objects.create_user(username=username, password=password1)
-                    new_setting = Setting.objects.create()
-                    Authentication.objects.create(user=new_user, setting=new_setting)
-                    
-                    shortcut_logger("User registered.")
-                    
-                except Exception(e) as e:
-                    shortcut_logger("Error while creating new user.")
-                    
-                    # if exception is raise
-                    # to register page.
-                    return shortcut_register_view(request, e)
+                shortcut_logger("User registered.")
                 
-                shortcut_logger("New user registered, returning to login page.")
+            except Exception(e) as e:
+                shortcut_logger("Error while creating new user.")
                 
-                # if user is successfull register,
-                # return to login page.
-                shortcut_message(request, message="User successfully registered.")
-                return redirect(reverse("authentication:login"))
-                # return HttpResponseRedirect(reverse("authentication:login"))
-            
-            else:
-                # If password1 and password doesnot match.
+                # if exception is raise
                 # to register page.
-                return shortcut_register_view(request, message="Password doesn't matched", pre_data=request.POST)
+                return shortcut_register_view(request, e)
             
-        # If register form is invalid, 
-        # go to register page.
-        return shortcut_register_view(request, message="Password doesn't matched", pre_data=request.POST)
+            shortcut_logger("New user registered, returning to login page.")
+            
+            # if user is successfull register,
+            # return to login page.
+            shortcut_message(request, message="User successfully registered.")
+            return redirect(reverse("authentication:login"))
+        
+        else:    
+            # If register form is invalid, 
+            # go to register page.
+            return shortcut_register_view(request, message="Password doesn't matched", pre_data=request.POST)
     
     shortcut_logger("GET request")
     return shortcut_register_view(request)
