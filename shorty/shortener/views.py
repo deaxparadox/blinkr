@@ -11,6 +11,7 @@ from django.shortcuts import (
 from django.urls import path, reverse
 from django.views.generic import ListView
 from django.db import IntegrityError
+from urllib.parse import urlencode
 
 from authentication.models import Authentication, Setting
 from .models import URL, URLEncodeMedium
@@ -57,10 +58,10 @@ def dashboard_view(request):
         
         # If "short_active" and "last" not present in URL,
         # redirect to same URL with the same query parameter.
-        if not last and not short_active:
-            return redirect(
-                "%s?last=no&short_active=no" % reverse("shortener:dashboard")
-            )
+        # if not last and not short_active:
+        #     return redirect(
+        #         "%s?last=no&short_active=no" % reverse("shortener:dashboard")
+        #     )
         
         
         
@@ -98,7 +99,14 @@ def dashboard_view(request):
                 "short_active": short_active
             }
         )
-    return redirect(reverse("authentication:login"))
+    
+    return redirect(
+        "%s?%s" % (
+            reverse("authentication:login"),
+            urlencode({"redirect_to": request.META.get("PATH_INFO")})
+        )
+    )
+    # return redirect(reverse("authentication:login"))
 
 
 
@@ -149,7 +157,7 @@ def hash_url_view(request):
                 # with new hash URL.
                 messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
                 return redirect(
-                    "%s?last=yes&short_active=yes" % reverse("shortener:dashboard")
+                    "%s?%s" % (reverse("shortener:dashboard"), urlencode({"last": "yes", "short_active": "yes"}))
                 ) 
             else:
                 messages.add_message(request, messages.WARNING, form.errors)

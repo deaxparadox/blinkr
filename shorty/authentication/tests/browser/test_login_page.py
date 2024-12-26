@@ -8,10 +8,14 @@ from time import sleep
 from authentication.utils.test.user import Testuser
 
 
+# DONE
 # 1. Test new user login.
 # 2. Test user login of not registered user, redirect to register page.
 # 3. Test incorrect user name as password.
 
+# PENDING
+# 4. Authenticated (logged in) user try to register.
+# 4. Authenticated (logged in) user try to login again.
 
 
 class TestLogin(StaticLiveServerTestCase):
@@ -94,6 +98,76 @@ class TestLogin(StaticLiveServerTestCase):
         self.assertEqual(
             self.selenium.current_url, 
             f"{self.live_server_url}{reverse("authentication:login")}"
+        )
+        
+        sleep(3)
+      
+    # 4. Authenticated (logged in) user try to register.
+    # This function test for authenticated user trying to 
+    # register will be redirected to dashboard.
+    def test_login_loggedin_retry_register(self):
+        
+        # creating the new user.
+        Testuser.create_user()
+        
+        
+        # login
+        self.selenium.get(f"{self.live_server_url}{reverse("authentication:login")}")
+        username_input = self.selenium.find_element(By.ID, "login-username")
+        username_input.send_keys(Testuser.username)
+        password_input = self.selenium.find_element(By.ID, "login-password")
+        password_input.send_keys(Testuser.password1)
+        self.selenium.find_element(By.CLASS_NAME, 'login-button').click()
+        
+        # user will be dashboard
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}{reverse("shortener:dashboard")}?last=no&short_active=no"
+        )
+        
+        # try to register
+        self.selenium.get(f"{self.live_server_url}{reverse("authentication:register")}")
+        
+        # will be redirect to dashboard
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}{reverse("shortener:dashboard")}?last=no&short_active=no"
+        )
+        
+        sleep(3)
+        
+    # 4. Authenticated (logged in) user try to login again.
+    # This function test for authenticated user trying to 
+    # login will be redirected to dashboard.
+    def test_login_loggedin_retry_login(self):
+        
+        # creating the new user.
+        Testuser.create_user()
+        
+        
+        sleep(1)
+        # login
+        self.selenium.get(f"{self.live_server_url}{reverse("authentication:login")}")
+        username_input = self.selenium.find_element(By.ID, "login-username")
+        username_input.send_keys(Testuser.username)
+        password_input = self.selenium.find_element(By.ID, "login-password")
+        password_input.send_keys(Testuser.password1)
+        self.selenium.find_element(By.CLASS_NAME, 'login-button').click()
+
+        # user will be dashboard
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}{reverse("shortener:dashboard")}?last=no&short_active=no"
+        )
+        
+        sleep(1)
+        # try to register
+        self.selenium.get(f"{self.live_server_url}{reverse("authentication:login")}")
+        
+        # will be redirect to dashboard
+        self.assertEqual(
+            self.selenium.current_url,
+            f"{self.live_server_url}{reverse("shortener:dashboard")}?last=no&short_active=no"
         )
         
         sleep(3)

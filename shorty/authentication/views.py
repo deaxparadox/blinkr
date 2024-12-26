@@ -3,9 +3,11 @@ from django.shortcuts import render, redirect, get_list_or_404
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
-from django.http import HttpResponseRedirect, Http404
+from django.http import HttpResponseRedirect, Http404, QueryDict
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
 import logging
+from time import sleep
 
 from . import forms
 from .models import Authentication, Setting
@@ -132,23 +134,23 @@ def check_existing_object(KClass = None, username: str = None) -> bool:
 # Login view
 def login_view(request):
     
-    
+    # If authenticated user try to register, 
+    # redirect to dashboard.
+    if request.user.is_authenticated:
+        _query_string = request.META.get("QUERY_STRING", None)
+        query_dict = QueryDict(_query_string)
+        shortcut_message(request, message="Error visiting login page.")
+        return redirect(reverse('shortener:dashboard'))
     
     # Check to request type.
     if request.method == "POST":
         
-        # check "redirect" query parameter
-
+        # check "redirect_to" query parameter
         # redirect_to = request.POST.get("redirect_to", None)
         # print("Login POST:", redirect_to)
         _query_string = request.META.get("QUERY_STRING", None)
-        query_string_dict = {}
-        if _query_string is not None:
-            _query_string = _query_string.split("&")
-            for q in _query_string:
-                k, v = q.split("=")
-                query_string_dict[k] = v
-            
+        query_dict = QueryDict(_query_string)
+
         
         login_form_data = forms.LoginForm(request.POST)
         
@@ -186,8 +188,8 @@ def login_view(request):
                 shortcut_message(request, messages.INFO, message="Login successfull.")
                 
                 # if redirect_to, then redirect to that path
-                if "redirect_to" in query_string_dict.keys():
-                    return redirect(query_string_dict["redirect_to"])
+                if len(query_dict) > 0:
+                    return redirect(query_dict.get("redirect_to"))
                     
                 return redirect(
                     "%s?last=no&short_active=no" % reverse("shortener:dashboard")
@@ -203,6 +205,7 @@ def login_view(request):
     
     redirect_to = request.GET.get("redirect_to")
     print("Login GET:", redirect_to)
+    print(request.GET.copy().urlencode())
     return shortcut_login_view(request, redirect_to=redirect_to)
 
 
@@ -212,6 +215,14 @@ def login_view(request):
 # Register view, register the new user.
 def register_view(request):
     shortcut_logger("Register view")
+    
+    # If authenticated user try to register, 
+    # redirect to dashboard.
+    if request.user.is_authenticated:
+        _query_string = request.META.get("QUERY_STRING", None)
+        query_dict = QueryDict(_query_string)
+        shortcut_message(request, message="Error visiting register page.")
+        return redirect(reverse('shortener:dashboard'))
     
     # Check the request type
     if request.method == "POST":
