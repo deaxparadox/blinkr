@@ -23,7 +23,7 @@
             <div class="login-heading text-center bg-warning mb-5">
                 <h3 class="p-3">Login</h3>
             </div>
-            <form action="{% url "authentication:login" %}" method="post">
+            <form {% if redirect %} action="{{ redirect_to_url }}" {% else %} action="{% url "authentication:login" %}" {% endif %} method="post">
                 {% csrf_token %}
                 {{ login_form|crispy }}
                 <div class="container-fluid d-flex justify-content-center mt-5">

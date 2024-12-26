@@ -1,7 +1,8 @@
 from typing import Any
-from django.http import HttpRequest, HttpResponse
+from django.http import HttpRequest, HttpResponse, Http404
 from django.views.decorators.http import require_POST, require_GET
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.shortcuts import (
     render, 
     get_object_or_404, 
@@ -48,19 +49,53 @@ def index_view(request):
 # new url
 # 
 def dashboard_view(request):
+    # print(request.META.get('PATH_INFO', None))
+    # print(request.META.get('HTTP_HOST', None))
     if request.user.is_authenticated:
-        urls = URL.objects.all().order_by("-created")
-        if len(urls) > 5:
-            urls = urls[:5]
+        short_active = request.GET.get('short_active', None)
+        last = request.GET.get('last', None)
+        
+        # If "short_active" and "last" not present in URL,
+        # redirect to same URL with the same query parameter.
+        if not last and not short_active:
+            return redirect(
+                "%s?last=no&short_active=no" % reverse("shortener:dashboard")
+            )
+        
+        
+        
+        # Get user
+        user = None
+        try:
+            # user = User.objects.get(username=request.user.username)
+            user = get_object_or_404(User, username=request.user.username)
+        except Http404:
+            messages.add_message(request, messages.DEBUG, "Unknown error: logged-in user error.")
+    
+        
+        # If "last" and "short_active" are set to "yes",
+        # include the last shorted URL for display
+        last_url = None
+        if last == "yes" and short_active == "yes":
+            _last_url: URL = user.authentication.url.last()
+            last_url = "http://%s%s" % (
+                request.META.get("HTTP_HOST"), 
+                reverse("shortener:access", kwargs={"url_hash": _last_url.url_hash})
+            )
             
-        form = URLForm()
+        
+        
+        # url form    
+        url_form = URLForm()
+        
         messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
         return render(
             request,
             "shortener/dashboard.html",
             {
-                "urls": urls,
-                "form": form
+                "form": url_form,
+                "last_url": last_url,
+                "short_active": short_active
             }
         )
     return redirect(reverse("authentication:login"))
@@ -71,26 +106,56 @@ def dashboard_view(request):
 
 # Hash url view
 # 
-# This url will receive a request with original url,
+# This url will receive a POST request with original url,
 # to hash it. And will return up to Index view.
 # 
-@require_POST
 def hash_url_view(request):
+    
+    # Check user authentication
     if request.user.is_authenticated:
-        form = URLForm(request.POST)
-        if form.is_valid():
-            # Update `medium` field of medium
-            model: URL = form.save(commit=False)
-            model.medium = URLEncodeMedium.NORMAL
-            model.save()
+        
+        # Accept only POST request.    
+        if request.method == "POST":
             
+            # extract URLForm
+            form = URLForm(request.POST)
+            
+            # validate URLForm
+            if form.is_valid():
+                
+                # Step 1: Search the user, for Hash the URL.
+                # Step 2: Hash the URL.
+                # Step 3: Create ForeignKey.
+                
+                # Step 1
+                try:
+                    user = get_object_or_404(User, username=request.user.username)
+                except Http404:
+                    messages.add_message(request, messages.WARNING, "User not found.")
+                    return redirect(reverse("shortener:dashboard"))
+                
+                # Step 2
+                # Update `medium` field of medium
+                new_url: URL = form.save(commit=False)
+                new_url.medium = URLEncodeMedium.NORMAL
+                new_url.save()
+                
+                # Step 3
+                # Adding URL to authentication.
+                user.authentication.url.add(new_url)
+                
 
-            messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
-            return redirect(reverse("shortener:index")) 
-    
-        messages.add_message(request, messages.WARNING, form.errors)
-        return redirect(reverse("shortener:index"))
-    
+                # Return a successfull message. Redirecting to dashboard,
+                # with new hash URL.
+                messages.add_message(request, messages.SUCCESS, "URL hashed successfully.")
+                return redirect(
+                    "%s?last=yes&short_active=yes" % reverse("shortener:dashboard")
+                ) 
+            else:
+                messages.add_message(request, messages.WARNING, form.errors)
+                return redirect(reverse("shortener:dashboard"))
+        else:
+            return redirect(reverse("shortener:dashboard"))
     else:
         return redirect(reverse("authenication:login"))
 
@@ -111,20 +176,38 @@ def access_view(request, url_hash: str|None = None):
     #     return redirect(reverse("shortener:index"))
     url = get_object_or_404(URL, url_hash=url_hash)
     url.clicked()
-
     return redirect(url.full_url)
 
 
 @require_GET
 def history_view(request):
-    urls = URL.objects.all().order_by("-created_at")
-    return render(
-        request,
-        "shortener/history.html",
-        {
-            "urls": urls
-        }
-    )
+    # print(request.build_absolute_uri())
+    if request.user.is_authenticated:
+        
+        # Step 1: Get user from request.
+        # Step 2: Get user from database.
+        # Step 3: Get user URLS.
+        
+        req_user = request.user.username
+        user = User.objects.get(username=req_user)
+        urls = user.authentication.url.all().order_by("-created")
+        
+        return render(
+            request,
+            "shortener/history.html",
+            {
+                "urls": urls
+            }
+        )
+    else:
+        return redirect(
+            "%s://%s%s?redirect_to=%s" % (
+               request.scheme, 
+               request.META.get("HTTP_HOST"),
+               reverse("authentication:login"),
+               request.META.get("PATH_INFO")
+            )
+        )
     
 @require_GET
 def view_search_view(request):

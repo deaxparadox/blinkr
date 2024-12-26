@@ -15,9 +15,9 @@
     
     {% include "include/navbar.html" %}
     
-    {% if user.is_authenticated %}
+    {% comment %} {% if user.is_authenticated %}
         {% include "include/tabs.html" %}
-    {% endif %}
+    {% endif %} {% endcomment %}
 
     <div class="container content-box">
         {% block content %}{% endblock content %}

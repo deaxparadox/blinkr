@@ -2,12 +2,17 @@
 {% load crispy_forms_tags %}
 
 {% load static %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static "shortener/dashboard.css" %}">
+{% endblock css %}
+
 {% block title %}
   Shortener
 {% endblock %}
 
 {% block content %}
-    <div class="container">
+    <div class="container mt-5">
         {% comment %} <h2 class="text-danger my-2 py-2">URL</h2> {% endcomment %}
         <form action="{% url "shortener:hash" %}" method="post">
             {% csrf_token %}
@@ -17,15 +22,21 @@
             </div>
         </form>
     </div>
-  {% comment %} <div class="container my-5">
-    <h2 class="text-danger my-2 py-2">Encode</h2>
-    <div class="input-group mb-3 input-group-lg">
-      <input id="input-url" type="text" class="form-control" placeholder="URL..." aria-label="URL..." aria-describedby="button-addon2" />
-      <button id="input-button" class="btn btn-success px-5" type="button" id="button-addon2">Short</button>
-    </div>
-  </div> {% endcomment %}
-  {% if urls|length > 0 %}
-    <div class="container">
+    {% if short_active and last_url %}
+      <div class="container mt-5 fs-5 ewl-short-active-container">
+        <div class="container-fluid ewl-short-url-inner  d-flex justify-content-center">
+          <div class="ewl-short-url-container">
+            <p class='px-3 ewl-short-url'>{{last_url}}</p>
+          </div>
+          <div class='ewl-short-btn-container'>
+            <button class="btn btn-lg btn-warning fw-bold rounded-4 px-5 ewl-short-btn">Copy</button>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    
+  {% comment %} {% if urls|length > 0 %}
+    <div class="container-fluid">
       <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">Latest</h2>
       <table class="table table-hover">
         <thead class="table-danger">
@@ -40,9 +51,9 @@
           <tbody>
             <tr>
               <th scope="row">{{ forloop.counter }}</th>
-              <td>{{ url.full_url|truncatechars:80 }}</td>
+              <td><span>{{ url.full_url|truncatechars:80 }}</span></td>
               <td><a href="{{ url.get_absolute_url }}" target="_blank" rel="noopener noreferrer">{{ url.url_hash }}</a></td>
-              <td>{{ url.clicks }}</td>
+              <td><span>{{ url.clicks }}</span></td>
             </tr>
           </tbody>
         {% endfor %}
@@ -52,7 +63,7 @@
     <div class="container">
       <h1>No Data found!</h1>
     </div>
-  {% endif %}
+  {% endif %} {% endcomment %}
 {% endblock %}
 
 {% block js %}

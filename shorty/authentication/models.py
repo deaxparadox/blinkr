@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.translation import gettext_lazy as _
+from django.shortcuts import redirect
+from django.urls import reverse
+
 
 
 class AccountDeactivateChoices(models.IntegerChoices):
@@ -41,6 +44,36 @@ class Authentication(models.Model):
     # )
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+    
+    
+    
+    @classmethod
+    def get_absolute_login_redirect_url(
+        self,
+        request,
+        redirect_to: str | None = None
+    ):
+        """
+        This function create absolute URL for redirection from login.
+        
+        request: Request request.
+        
+        redirect_to: URL for redirection.
+        """
+        
+        # HTTP VERSION
+        http_scheme: str = request.scheme
+        
+        # SERVER ADDR
+        http_host: str = request.META.get("HTTP_HOST")
+        
+        # PATH
+        path: str | None = None
+        
+        return "%s?redirect_to=%s" % (
+            reverse("authentication:login"),
+            redirect_to
+        )
     
     def __str__(self) -> str:
         return f"{self.user.username}"

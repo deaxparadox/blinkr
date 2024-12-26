@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "api.apps.ApiConfig",
     "gql.apps.GqlConfig",
     "authentication.apps.AuthenticationConfig",
+    "limit.apps.LimitConfig",
 ]
 
 MIDDLEWARE = [
@@ -121,7 +122,9 @@ TIME_ZONE = 'UTC'
 
 USE_I18N = True
 
-USE_TZ = True
+# If USE_TZ = True, Django will load the default timezone
+# of TIME_ZONE = "America/Chicago"
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -179,3 +182,5 @@ LOGGING = {
         "authentication.views": {}
     }
 }
+# Logging status login is True only.
+LOGGING_ENABLED = True

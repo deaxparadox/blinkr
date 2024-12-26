@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.http import HttpResponseRedirect, Http404
+from django.conf import settings
 import logging
 
 from . import forms
@@ -20,9 +21,11 @@ logger = logging.getLogger(__name__)
 # Shortcut for logging
 def shortcut_logger(message, level = "Warning"):
     global logger
-    # if level == "Warning":
-    logger.warning(message)
-    # return 
+    
+    if settings.LOGGING_ENABLED:
+        # if level == "Warning":
+        logger.warning(message)
+        # return 
     
 
 # Shortcut for messaging
@@ -62,7 +65,7 @@ def shortcut_register_view(request, message:str = None, pre_data=None):
 
 
 # Short for rederning login view
-def shortcut_login_view(request, message:str = None, pre_data=None):
+def shortcut_login_view(request, message:str = None, pre_data=None, redirect_to: str | None = None):
     """
     This function is shortcut for generating login response, with message and 
     login details.
@@ -74,7 +77,6 @@ def shortcut_login_view(request, message:str = None, pre_data=None):
     in reponse except password.
     """
     
-    
     # If message is passed.
     if message is not None:
         shortcut_message(request, message=message)
@@ -85,12 +87,32 @@ def shortcut_login_view(request, message:str = None, pre_data=None):
     else:
         login_form = forms.LoginForm()
         
+    
+    # If "redirect_to_url" is passed in argument the,
+    # render with "get_abosolute_login_direct_url", it will
+    # create URL for login POST request, with forwarding URL.
+    redirect_to_url: str | None = None
+    if redirect_to:
+        redirect_to_url = Authentication.get_absolute_login_redirect_url(request, redirect_to)
+        # print(redirect_to_url)
+    
+        return render(
+            request,
+            "authentication/login.html",
+            {
+                "login_form": login_form,
+                "redirect_to_url": redirect_to_url,
+                "redirect" : True
+            }
+        )
+        
     # Return to login page.
     return render(
         request,
         "authentication/login.html",
         {
-            "login_form": login_form
+            "login_form": login_form,
+            "redirect": False
         }
     )
 
@@ -110,8 +132,24 @@ def check_existing_object(KClass = None, username: str = None) -> bool:
 # Login view
 def login_view(request):
     
+    
+    
     # Check to request type.
     if request.method == "POST":
+        
+        # check "redirect" query parameter
+
+        # redirect_to = request.POST.get("redirect_to", None)
+        # print("Login POST:", redirect_to)
+        _query_string = request.META.get("QUERY_STRING", None)
+        query_string_dict = {}
+        if _query_string is not None:
+            _query_string = _query_string.split("&")
+            for q in _query_string:
+                k, v = q.split("=")
+                query_string_dict[k] = v
+            
+        
         login_form_data = forms.LoginForm(request.POST)
         
         # Check if the form is valid,
@@ -122,8 +160,16 @@ def login_view(request):
             username = login_form_data.cleaned_data['username']
             password = login_form_data.cleaned_data['password']
             
-            # Check user existence, if user does not exist,
-            # redirect to register page.
+            # Lowercase the username and validate username.
+            if (username == " " or username == "" or username is None):
+                return shortcut_login_view(request, message="Invalid username.", pre_data=request.POST)
+            try:
+                username = username.lower()
+            except Exception as e:
+                return shortcut_login_view(request, message="Invalid username.", pre_data=request.POST)
+            
+            # Check user existence.
+            # If user does not exist, redirect to register page.
             if not check_existing_object(User, username=username):
                 shortcut_message(request, message="User not registered.")
                 return redirect(reverse("authentication:register"))
@@ -138,7 +184,14 @@ def login_view(request):
                 # login and redirect to index page.
                 login(request, user)
                 shortcut_message(request, messages.INFO, message="Login successfull.")
-                return redirect(reverse("shortener:dashboard"))
+                
+                # if redirect_to, then redirect to that path
+                if "redirect_to" in query_string_dict.keys():
+                    return redirect(query_string_dict["redirect_to"])
+                    
+                return redirect(
+                    "%s?last=no&short_active=no" % reverse("shortener:dashboard")
+                )
             else:
                 # If user is not authenticated,
                 # redirect to login.
@@ -148,8 +201,9 @@ def login_view(request):
             # If login data is invalid return login page.
             return shortcut_login_view(request, message="Invalid username or password.", instance=login_form_data)
     
-    
-    return shortcut_login_view(request)
+    redirect_to = request.GET.get("redirect_to")
+    print("Login GET:", redirect_to)
+    return shortcut_login_view(request, redirect_to=redirect_to)
 
 
 
@@ -175,7 +229,9 @@ def register_view(request):
             password1: str = register_form_data.cleaned_data['password1']
             password2: str = register_form_data.cleaned_data['password2']
             
-            # Lowercase the username and validate username.
+            # 1. Lowercase the username and validate username.
+            # 2. This validation is for request made using the script form data.
+            # 3. This default validation will be present in the web page.
             if (username == " " or username == "" or username is None):
                 return shortcut_register_view(request, message="Invalid username.", pre_data=request.POST)
             try:
@@ -195,8 +251,8 @@ def register_view(request):
                 return redirect(reverse("authentication:login"))
             
 
-            # Create new user.
-            # If any exception is raise,
+            # 1. Create new user.
+            # 2. If any exception is raise,
             # return to registration page.
             try:
                 # registering new user
