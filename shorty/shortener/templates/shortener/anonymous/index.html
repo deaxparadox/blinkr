@@ -1,0 +1,26 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}URL Shortener{% endblock title %}
+{% block css %}
+<link rel="stylesheet" href="{% static "shortener/anonymous/base.css" %}">
+{% endblock css %}
+{% block content %}
+
+<div class="container mt-5 lew-url-container">
+    <div class="lew-url-inner">
+        <form class='lew-url-form' action="{% url "shortener:hash" %}" method="post">
+            <div class="lew-url-input-box lew-grid-item-1">
+              <input type="text" class="lew-url-input" placeholder="Enter you URL">
+            </div>
+            <div class="container-fluid d-flex justify-content-end lew-url-btn-box lew-grid-item-2">
+                <button class="btn btn-lg btn-success px-5 lew-url-button">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+<script type="module" src="{% static "shortener/anonymous/base.js" %}"></script>
+{% endblock js %}

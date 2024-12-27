@@ -1,0 +1,65 @@
+.lew-url-container {
+    display: flex;
+    justify-content: center;
+    padding: 60px 10px;
+}
+
+.lew-url-form {
+    /* background-color: rgb(255, 252, 228); */
+    background-image: linear-gradient(to right, rgb(237, 243, 255), rgb(255, 255, 211), rgb(226, 255, 230));
+    box-shadow: 0px 0px 2px 2px rgb(197, 197, 197);
+    padding: 20px 30px;
+    border-radius: 12px;
+    width: max-content;
+    box-sizing: border-box;
+    display: grid;
+    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px;
+    grid-template-columns: 100px 100px 100px 100px 100px 100px;
+}
+.lew-grid-item-1 {
+    grid-row: span 2;
+    grid-column: 1 / 7;
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+.lew-grid-item-2 {
+    grid-row: span 1;
+    grid-column: span 7;
+
+    display: flex;
+    justify-content: end;
+}
+
+.lew-url-input {
+    padding: 12px 0px 12px 6px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: large;
+    border-radius: 12px;
+    outline-color: rgb(255, 241, 43);
+    border: 3px solid white;
+    width: 100%;
+    color: rgb(77, 77, 77);
+}
+.lew-url-input:focus {
+    border-color: rgb(255, 241, 43);
+}
+
+
+.lew-url-btn {
+    background-color: rgb(247, 222, 1);
+    border-width: 2px;
+    border-style: solid;
+    border-color: rgb(247, 222, 1);
+    border-radius: 12px;
+    padding-left: 30px;
+    padding-right: 30px;
+    font-size: medium;
+    font-weight: bold;
+    color: rgb(77, 77, 77);
+}
+.lew-url-btn:hover {
+    border-color: rgb(150, 135, 1);
+}

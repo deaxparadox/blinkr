@@ -25,18 +25,9 @@ from . import views
 urlpatterns = [
     
     
-    path(
-        "v1/", 
-        include([
-            path("api/", include("api.urls", namespace="api")),
-            path("auth/", include("authentication.urls", namespace="authentication")),
-            path("", include("shortener.urls", namespace="shortener")),
-            
-        ])
-    ),
-
-    # Base path
-    path("", views.index_view, name="index"),
+    path("api/", include("api.urls", namespace="api")),
+    path("auth/", include("authentication.urls", namespace="authentication")),
+    path("", include("shortener.urls", namespace="shortener")),
     
     # GraphQL path
     path("graphql/", csrf_exempt(GraphQLView.as_view(graphiql=True)), name="shortener_graphql"),

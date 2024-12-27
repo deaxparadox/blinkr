@@ -14,8 +14,8 @@ from django.db import IntegrityError
 from urllib.parse import urlencode
 
 from authentication.models import Authentication, Setting
-from .models import URL, URLEncodeMedium
-from .form import URLForm
+from shortener.models import URL, URLEncodeMedium
+from shortener.form import URLForm
 
 
 # Index view
@@ -50,9 +50,10 @@ def index_view(request):
 # new url
 # 
 def dashboard_view(request):
-    # print(request.META.get('PATH_INFO', None))
     # print(request.META.get('HTTP_HOST', None))
     if request.user.is_authenticated:
+        
+        # Fetch query
         short_active = request.GET.get('short_active', None)
         last = request.GET.get('last', None)
         
@@ -209,11 +210,11 @@ def history_view(request):
         )
     else:
         return redirect(
-            "%s://%s%s?redirect_to=%s" % (
+            "%s://%s%s?%s" % (
                request.scheme, 
                request.META.get("HTTP_HOST"),
                reverse("authentication:login"),
-               request.META.get("PATH_INFO")
+               urlencode({"redirect_to": request.META.get("PATH_INFO")})
             )
         )
     

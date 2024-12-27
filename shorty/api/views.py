@@ -63,11 +63,19 @@ def create(request):
     
     serializer = HashURLSerializer(data=request.data)
     if serializer.is_valid():
-        print(serializer.data)
+        # print(serializer.data, type(serializer.data))
         try:
-            serializer.create(serializer.validated_data)
+            query_set = serializer.create(serializer.validated_data)
+            # print(
+            #     "Data:", 
+            #     query_set.url_hash
+            # )
+            ret = {
+                "hash": request.build_absolute_uri(reverse("shortener:access", kwargs={"url_hash": query_set.url_hash}))
+            }
+            ret.update({"full_url": serializer.data.get("full_url")})
             return Response(
-                serializer.data, 
+                ret, 
                 status=status.HTTP_201_CREATED
             )
         except IntegrityError as e:

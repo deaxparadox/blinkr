@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from django.views.generic import ListView
 
 
+
 def index_view(request):
     if request.user.is_authenticated:
         return redirect(reverse("shortener:dashboard"))
