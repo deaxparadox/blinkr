@@ -31,9 +31,15 @@ table {
     border-right: 1px solid rgb(216, 216, 216);
 } */
 
-.message-toast {
+/* .message-toast {
     position: fixed;
-    /* left: 80%; */
     right: 50px;
     bottom: 20px;
+} */
+
+* {
+    font-family: "JetBrains Mono", serif;
+    font-optical-sizing: auto;
+    font-weight: 500;
+    font-style: normal;
 }

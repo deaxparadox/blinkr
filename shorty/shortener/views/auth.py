@@ -50,6 +50,8 @@ def index_view(request):
 # new url
 # 
 def dashboard_view(request):
+    # print(request.session.get("welcome", False))
+    # print(request.session.keys())
     # print(request.META.get('HTTP_HOST', None))
     if request.user.is_authenticated:
         
@@ -90,7 +92,16 @@ def dashboard_view(request):
         # url form    
         url_form = URLForm()
         
-        messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
+        # Session controlle welcome message.
+        # 
+        # After the welcome message is loaded, set 
+        # "welcome" in session to False. It will not 
+        # load the welcome message again.
+        if not request.session.has_key("welcome"):
+            messages.add_message(request, messages.INFO, "Welcome to URL Shortener")
+            request.session['welcome'] = True
+        
+        
         return render(
             request,
             "shortener/dashboard.html",
@@ -100,6 +111,7 @@ def dashboard_view(request):
                 "short_active": short_active
             }
         )
+    
     
     return redirect(
         "%s?%s" % (

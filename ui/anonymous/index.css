@@ -2,18 +2,21 @@
     display: flex;
     justify-content: center;
     padding: 60px 10px;
+    margin-top: 30px;
 }
 
-.lew-url-form {
+.lew-url-input-wrapper {
     /* background-color: rgb(255, 252, 228); */
     background-image: linear-gradient(to right, rgb(237, 243, 255), rgb(255, 255, 211), rgb(226, 255, 230));
     box-shadow: 0px 0px 2px 2px rgb(197, 197, 197);
     padding: 20px 30px;
+    /* border-top-left-radius: 12px;
+    border-top-right-radius: 12px; */
     border-radius: 12px;
     width: max-content;
     box-sizing: border-box;
     display: grid;
-    grid-template-rows: 50px 50px 50px 50px 50px 50px 50px 50px;
+    grid-template-rows: 50px 50px 50px;
     grid-template-columns: 100px 100px 100px 100px 100px 100px;
 }
 .lew-grid-item-1 {
@@ -33,6 +36,8 @@
     justify-content: end;
 }
 
+
+
 .lew-url-input {
     padding: 12px 0px 12px 6px;
     font-family: Arial, Helvetica, sans-serif;
@@ -48,10 +53,10 @@
 }
 
 
-.lew-url-btn {
+.lew-url-btn, .lew-url-reset-btn {
+    cursor: pointer;
     background-color: rgb(247, 222, 1);
     border-width: 2px;
-    border-style: solid;
     border-color: rgb(247, 222, 1);
     border-radius: 12px;
     padding-left: 30px;
@@ -60,6 +65,83 @@
     font-weight: bold;
     color: rgb(77, 77, 77);
 }
-.lew-url-btn:hover {
-    border-color: rgb(150, 135, 1);
+.lew-url-btn:hover, .lew-url-reset-btn {
+    border-color: rgb(230, 207, 0);
+}
+.lew-url-reset-btn {
+    margin-left: 10px;
+}
+/* 
+.lew-hash-url-wrapper {
+
+} */
+
+.lew-hash-url-wrapper {
+    height: 0px;
+    padding: 0px;
+    overflow: hidden;
+    box-sizing: border-box;
+
+    display: flex;
+    justify-content: center;
+    
+    transition: all 500ms ease-in;
+}
+
+.lew-hash-url-copy {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    /* padding: 4px 30px; */
+    /* padding-left: 30px;
+    padding-right: 30px; */
+    
+    
+    background-color: rgb(82, 82, 41);
+    color: rgb(250, 250, 241);
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+    box-shadow: 0px 0px 2px 2px rgb(49, 49, 47);
+
+    width: 80%;
+
+}
+
+.lew-hash-url, .lew-hash-copy {
+    display: inline-block;
+}
+.lew-hash-url {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    /* padding: 10px 10px; */
+    font-size: large;
+    font-weight: bold;
+    text-align: center;
+    
+}
+.lew-hash {
+    color: rgb(102, 199, 255)   ;
+    text-decoration: none;
+}
+.lew-hash-copy  {
+    padding: 6px;
+    cursor: pointer;
+    background-color: rgb(247, 222, 1);
+    /* border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px; */
+    border-radius: 12px;
+    border-width: 2px;
+    border-color: rgb(247, 222, 1);
+}
+.lew-hash-copy:hover {
+    border-color: rgb(230, 207, 0);
+}
+
+.lew-hash-copy > img {
+    height: 24px;
+    width: 24px;
 }

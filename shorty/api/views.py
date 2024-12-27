@@ -62,14 +62,25 @@ def create(request):
     """
     
     serializer = HashURLSerializer(data=request.data)
+
+    
     if serializer.is_valid():
-        # print(serializer.data, type(serializer.data))
         try:
-            query_set = serializer.create(serializer.validated_data)
+            
+            # check for URL existence
+            urls = URL.objects.filter(full_url=serializer.validated_data.get('full_url'))
+            if len(urls) > 0:
+                # URL exist
+                query_set = urls[0]
+            else:
+                # URL not exist, create new hash
+                query_set = serializer.create(serializer.validated_data)
+            
             # print(
             #     "Data:", 
             #     query_set.url_hash
             # )
+            
             ret = {
                 "hash": request.build_absolute_uri(reverse("shortener:access", kwargs={"url_hash": query_set.url_hash}))
             }

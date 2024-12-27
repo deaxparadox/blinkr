@@ -7,6 +7,7 @@ from django.http import HttpResponseRedirect, Http404, QueryDict
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
 import logging
+from urllib.parse import urlencode
 from time import sleep
 
 from . import forms
@@ -300,10 +301,15 @@ def register_view(request):
 
 # Logout page view
 def logout_view(request):
-    return render(
-        request,
-        "authentication/logout.html"
-    )
+    if request.user.is_authenticated:
+        return render(
+            request,
+            "authentication/logout.html"
+        )
+    else:
+        return redirect(
+            "%s" % reverse("anonymous")
+        )
     
 # logout view
 def logout_request_view(request):

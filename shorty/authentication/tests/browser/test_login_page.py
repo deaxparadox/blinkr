@@ -12,10 +12,8 @@ from authentication.utils.test.user import Testuser
 # 1. Test new user login.
 # 2. Test user login of not registered user, redirect to register page.
 # 3. Test incorrect user name as password.
-
-# PENDING
 # 4. Authenticated (logged in) user try to register.
-# 4. Authenticated (logged in) user try to login again.
+# 5. Authenticated (logged in) user try to login again.
 
 
 class TestLogin(StaticLiveServerTestCase):

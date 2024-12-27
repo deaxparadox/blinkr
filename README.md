@@ -1,8 +1,17 @@
 # django-url-shortner
 
+
+### Documentation [⏭️](docs/README.md)
+
 ### URL Shortner Project
 
-GraphQL-based URL shortener application, used for shortening the length url.
+<!-- GraphQL-based URL shortener application, used for shortening the length url. -->
+
+The URL Shortener is a web application project, built purely on Django. Utilizing Django and frontend technologies (HTML, CSS, JavaScript, Bootstrap) for implementing the dynamic behaviour for the user.
+
+The appliction integration docker support for building the docker image.
+
+### Project Setup
 
 Clone repository:
 
