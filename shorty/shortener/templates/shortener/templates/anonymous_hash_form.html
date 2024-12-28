@@ -1,0 +1,33 @@
+{% load static %}
+
+<link rel="stylesheet" href="{% static "shortener/anonymous/base.css" %}">
+
+<div class="lew-url-container">
+    <div class="lew-url-inner">
+        <div class='lew-url-input-wrapper'>
+            <div class="lew-grid-item-1">
+              <input type="text" id="lew-url-input" class="lew-url-input" placeholder="Enter you URL" required>
+            </div>
+            <div class="lew-grid-item-2">
+                <button type="button" class="lew-url-btn">Submit</button>
+                <button type="button" class="lew-url-reset-btn">Reset</button>
+            </div>
+            <!-- <div class="lew-grid-item-4">
+                <button type="button" class="lew-hash-btn">Copy</button>
+            </div> -->
+        </div>
+        <div class="lew-hash-url-wrapper">
+            <div class="lew-hash-url-copy">
+                <span class="lew-hash-url">
+                    <a class="lew-hash"></a>
+                </span>
+                <button class="lew-hash-copy">
+                    <img class="" src="{% static "images/copy-clip-icon.svg" %}" alt="Image not found">
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="module" src="{% static "shortener/anonymous/base.js" %}"></script>

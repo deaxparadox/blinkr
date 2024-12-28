@@ -1,0 +1,31 @@
+
+{% load crispy_forms_tags %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static "ttener/dashboard.css" %}">
+
+
+<div class="container mt-5">
+    {% comment %} <h2 class="text-danger my-2 py-2">URL</h2> {% endcomment %}
+    <form action="{% url "shortener:hash" %}" method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="container-fluid d-flex justify-content-end">
+            <input type="submit" value="Submit" class="btn btn-lg btn-success px-5">
+        </div>
+    </form>
+</div>
+{% if short_active and last_url %}
+  <div class="container mt-5 fs-5 ewl-short-active-container">
+    <div class="container-fluid ewl-short-url-inner  d-flex justify-content-center">
+      <div class="ewl-short-url-container">
+        <p class='px-3 ewl-short-url'>{{last_url}}</p>
+      </div>
+      <div class='ewl-short-btn-container'>
+        <button class="btn btn-lg btn-warning fw-bold rounded-4 px-5 ewl-short-btn">Copy</button>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+<script src="{% static 'shortener/base.js' %}" type="module"></script>

@@ -1,40 +1,13 @@
 {% extends "_base.html" %}
+
 {% load static %}
+{% load shortener_forms %}
+
 {% block title %}URL Shortener{% endblock title %}
-{% block css %}
-<link rel="stylesheet" href="{% static "shortener/anonymous/base.css" %}">
-{% endblock css %}
+
+
 {% block content %}
 
-<div class="lew-url-container">
-    <div class="lew-url-inner">
-        <div class='lew-url-input-wrapper'>
-            <div class="lew-grid-item-1">
-              <input type="text" id="lew-url-input" class="lew-url-input" placeholder="Enter you URL" required>
-            </div>
-            <div class="lew-grid-item-2">
-                <button type="button" class="lew-url-btn">Submit</button>
-                <button type="button" class="lew-url-reset-btn">Reset</button>
-            </div>
-            <!-- <div class="lew-grid-item-4">
-                <button type="button" class="lew-hash-btn">Copy</button>
-            </div> -->
-        </div>
-        <div class="lew-hash-url-wrapper">
-            <div class="lew-hash-url-copy">
-                <span class="lew-hash-url">
-                    <a class="lew-hash"></a>
-                </span>
-                <button class="lew-hash-copy">
-                    <img class="" src="{% static "images/copy-clip-icon.svg" %}" alt="Image not found">
-                </button>
-            </div>
-        </div>
-    </div>
-</div>
+{% anonymous_hash_form %}
 
 {% endblock content %}
-
-{% block js %}
-<script type="module" src="{% static "shortener/anonymous/base.js" %}"></script>
-{% endblock js %}

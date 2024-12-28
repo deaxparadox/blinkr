@@ -2,35 +2,20 @@
 {% load crispy_forms_tags %}
 
 {% load static %}
+
+{% comment %} Loading history template tag {% endcomment %}
+{% load history %}
+
 {% block title %}
   Shortener
 {% endblock %}
 
 {% block content %}
-  {% if urls|length > 0 %}
-    <div class="container">
-      <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">History</h2>
-      <table class="table table-hover">
-        
-        {% for url in urls %}
-          <tbody class=''>
-            <tr>
-              {% comment %} <th scope="row">{{ forloop.counter }}</th> {% endcomment %}
-              <td><span class='ewl-small-text'>{{ url.full_url|truncatechars:80 }}</span></td>
-              <td><a class='text-decoration-none' href="{{ url.get_absolute_url }}" target="_blank" rel="noopener noreferrer">&#x1F517;</a></td>
-              {% comment %} <td>{{ url.medium_name }}</td> {% endcomment %}
-              <td><span class='px-2 d-inline-block bg-success text-white rounded-circle'>{{ url.clicks }}</span></td>
-              <td><button class="btn btn-sm bg-warning fw-bold rounded-5">Copy</button></td>
-            </tr>
-          </tbody>
-        {% endfor %}
-      </table>
-    </div>
-  {% else %}
-    <div class="container">
-      <h1>No Data found!</h1>
-    </div>
-  {% endif %}
+
+  {% comment %}  {% endcomment %}
+  {% load_url_history request %}
+
+
 {% endblock %}
 
 {% block js %}
