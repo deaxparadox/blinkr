@@ -23,13 +23,13 @@
         </form>
     </div>
     {% if short_active and last_url %}
-      <div class="container mt-5 fs-5 ewl-short-active-container">
-        <div class="container-fluid ewl-short-url-inner  d-flex justify-content-center">
-          <div class="ewl-short-url-container">
-            <p class='px-3 ewl-short-url'>{{last_url}}</p>
+      <div class="container mt-5 fs-5 lew-short-active-container">
+        <div class="container-fluid lew-short-url-inner  d-flex justify-content-center">
+          <div class="lew-short-url-container">
+            <a href="{{ last_url }}" target="_blank" class='px-3 lew-short-url'>{{ last_url }}</a>
           </div>
-          <div class='ewl-short-btn-container'>
-            <button class="btn btn-lg btn-warning fw-bold rounded-4 px-5 ewl-short-btn">Copy</button>
+          <div class='lew-short-btn-container'>
+            <button class="btn btn-lg btn-warning fw-bold rounded-4 px-5 lew-copy-btn">Copy</button>
           </div>
         </div>
       </div>
@@ -39,4 +39,5 @@
 
 {% block js %}
   <script src="{% static 'shortener/base.js' %}" type="module"></script>
+  <script src="{% static 'shortener/js/dashboard.js' %}" type="module"></script>
 {% endblock %}

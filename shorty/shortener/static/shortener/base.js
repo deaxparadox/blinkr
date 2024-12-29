@@ -27,13 +27,13 @@ const copyShortURL = () => {
     const shortActive = myParams.get("short_active");
 
     if (last === "yes" && shortActive === "yes") {
-        const short_url = document.querySelector(".ewl-short-url").innerText;
+        const short_url = document.querySelector(".lew-short-url").innerText;
         return short_url
     }
 }
 
 const copyShortURLHandler = () => {
-    document.querySelector(".ewl-short-btn").addEventListener("click", (event) => {
+    document.querySelector(".lew-short-btn").addEventListener("click", (event) => {
         const shortURL = copyShortURL();
         navigator.clipboard.writeText(shortURL).then(function(){
             console.log("Copied successfully");

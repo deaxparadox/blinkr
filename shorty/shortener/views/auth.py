@@ -82,8 +82,7 @@ def dashboard_view(request):
         last_url = None
         if last == "yes" and short_active == "yes":
             _last_url: URL = user.authentication.url.last()
-            last_url = "http://%s%s" % (
-                request.META.get("HTTP_HOST"), 
+            last_url = request.build_absolute_uri( 
                 reverse("shortener:access", kwargs={"url_hash": _last_url.url_hash})
             )
             
@@ -200,25 +199,19 @@ def access_view(request, url_hash: str|None = None):
     return redirect(url.full_url)
 
 
+
 @require_GET
 def history_view(request):
     # print(request.build_absolute_uri())
     if request.user.is_authenticated:
         
-        # Step 1: Get user from request.
-        # Step 2: Get user from database.
-        # Step 3: Get user URLS.
-        
-        req_user = request.user.username
-        user = User.objects.get(username=req_user)
-        urls = user.authentication.url.all().order_by("-created")
+        # History page rendering is done using,
+        # template tag "history".
         
         return render(
             request,
             "shortener/history.html",
-            {
-                "urls": urls
-            }
+            {}
         )
     else:
         return redirect(

@@ -6,6 +6,6 @@ register = template.Library()
 
 
 # Anonymous formtag
-@register.inclusion_tag("shortener/templates/anonymous_hash_form.html")
+@register.inclusion_tag("shortener/tag/anonymous_hash_form.html")
 def anonymous_hash_form():
     return {}

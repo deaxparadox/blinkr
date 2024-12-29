@@ -1,3 +1,7 @@
+/*
+MESSAGE
+*/ 
+
 
 const listAttributes = {
     classlist: 'toast align-items-center fade show message-toast text-bg-warning list-unstyled fw-bold shadow lew-message-list-item'.split(" "),
@@ -85,67 +89,47 @@ const createElements = async (message) => {
     return listitem1
 }
 
-const renderListItem = async(message) => {
+const renderListItem = async (message) => {
     document.querySelector(".lew-message-list").appendChild(await createElements(message));
 }
 
-// Dynamic message handler
-const triggerMessage = async () => {
-    document.querySelector(".lew-button").addEventListener("click", async (e) => {
-        // console.log("active")
-        const messsage = "Test message";
-        await renderListItem(messsage);
+
+/*
+COPY
+*/
+
+
+const copyToClipboard = async (message, error) => {
+
+    // Copy to Clipboard
+    navigator.clipboard.writeText(message).then(function () {
+        // Added to message about successful copy.
+
+        // Implement functionality for unsuccessfull copy.
+    }, function (err) {
+        alert("Could not copy to Clipboard");
     })
 }
 
 
-// Message handler
-const submitHandler = async () => {
-    document.querySelector(".lew-url-btn").addEventListener("click", async (e) => {
-        await renderListItem("Shortening the url...");
+const copyHashUrl = async () => {
+    const elements = document.querySelectorAll(".lew-copy-btn");
+    elements.forEach(async (e) => {
+        e.addEventListener("click", async () => {
+            const tr = e.parentElement.parentElement;
+            // console.log(tr); 
+            if (tr.hasChildNodes()) {
+                const urlHash = tr.children[2].firstChild.getAttribute('href');
+                // console.log();
+                copyToClipboard(urlHash);
+                await renderListItem("Copied!");
+            }
+        })
     })
-}
-const resetHandler = async () => {
-    document.querySelector(".lew-url-reset-btn").addEventListener("click", async (e) => {
-        await renderListItem("Form cleared");
-    })
-}
-const copyHandler = async () => {
-    document.querySelector(".lew-hash-copy").addEventListener("click", async (e) => {
-        await renderListItem("Copied!");
-    })
+    // const hashUrl = document.querySelector(".lew-short-url").innerText;
+        // copyToClipboard(hashUrl, null);
+        // await renderListItem("Copied!");
+    
 }
 
-
-const sleep = async (delay) => {
-    setTimeout(async () => {}, delay);
-}
-
-// Message disappearing handlers
-// const hideMessage = async() => {
-//     const hideMessageInterval = setInterval(async () => {
-//         const messageList = document.querySelector(".lew-message-list");
-//         // console.log(messageList.childNodes)
-//         if (messageList.hasChildNodes) {
-//             for (let element of messageList.children) {
-//                 if (element.classList.contains("show")) {
-//                     element.classList.remove("show");
-//                     element.classList.add("hide");
-//                     // console.log(element);
-
-//                     // 
-//                     break
-//                     // sleep(1000);
-                    
-//                 }
-//             }
-//         }
-//     }, 2000)
-// }
-
-
-// Run
-submitHandler();
-copyHandler();
-resetHandler();
-hideMessage();
+copyHashUrl();

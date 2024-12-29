@@ -1,7 +1,7 @@
 
 
 
-/* .ewl-short-url-container {
+/* .lew-short-url-container {
     display: flex;
     flex-flow: column;
     justify-content: center;
@@ -13,29 +13,29 @@
 
 } */
 
-.ewl-short-active-container {
+.lew-short-active-container {
     padding: 20px;
     background-image: linear-gradient(to right, rgb(238, 238, 253), rgb(255, 255, 242));
     border: 1px solid rgb(224, 224, 224);
     box-shadow: 0px 0px 1px 2px rgb(253, 252, 252);
 }
 
-.ewl-short-url-container, .ewl-short-btn-container {
+.lew-short-url-container, .lew-short-btn-container {
     height: 100px;
     display: flex;
     flex-flow: column;
     justify-content: center;
 }
-.ewl-short-url-container {
+.lew-short-url-container {
     width: 60%;
     align-items: end;
     padding-top: 9px;
 }
-.ewl-short-url-container > .ewl-short-url {
+.lew-short-url-container > .lew-short-url {
     font-weight: bold;
     color: rgb(78, 78, 78);
 }
-.ewl-short-btn-container {
+.lew-short-btn-container {
     width: 40%;
     align-items: start;
 }
