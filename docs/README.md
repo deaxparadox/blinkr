@@ -20,3 +20,6 @@ URL shortening web application, this application helps you hash the long URLs in
 - [Logging system](log.md)
 - [Session system](session.md)
 
+### Helpful JavaScript
+
+- [Parse query string](/docs/js/urls.js): This file contains the js functions related to Parsing URLs.

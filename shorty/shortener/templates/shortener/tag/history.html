@@ -2,7 +2,7 @@
 
 
 <h2 class="text-danger my-4 border border-2 border-top-0 border-end-0 border-start-0 py-2">
-    <span class="d-inline-block bg-primary text-white rounded-4 px-4">{{ urls|length }}</span> 
+    <span class="d-inline-block bg-primary text-white rounded-2 px-2">{{ urls|length }}</span> 
     <span>History</span>
 </h2>
 
@@ -12,11 +12,31 @@
         {% for url in urls %}
             <tbody>
                 <tr>
-                    <th scope="row">{{ forloop.counter }}.</th>
-                    <td><span class='lew-small-text'>{{ url.full_url | truncatechars:80 }}</span></td>
-                    <td><a class='text-decoration-none' href="{{ request_scheme }}://{{ request_http_host  }}{{ url.get_absolute_url }}" target="_blank" rel="noopener noreferrer">&#x1F517;</a></td>
-                    <td><span class='px-2 d-inline-block bg-success text-white rounded-circle'>{{ url.clicks }}</span></td>
-                    <td><button class="btn btn-sm bg-warning fw-bold rounded-5 lew-copy-btn">Copy</button></td>
+                    <th scope="row">
+                        <span class='lew-small-text d-inline-block w-100 h-100 mt-1'>
+                            {{ forloop.counter }}.
+                        </span>
+                    </th>
+                    <td width='80%'>
+                        <span class='lew-small-text d-inline-block w-100 h-100 mt-1'>
+                            {{ url.full_url | truncatechars:80 }}
+                        </span>
+                    </td>
+                    <td>
+                        <a class='text-decoration-none p-1 d-inline-block w-100 h-100' href="{{ request_scheme }}://{{ request_http_host  }}{{ url.get_absolute_url }}" target="_blank" rel="noopener noreferrer">
+                            &#x1F517;
+                        </a>
+                    </td>
+                    <td>
+                        <span class='p-1 d-inline-block bg-success text-white rounded-circle w-100 h-100 text-center'>
+                            {{ url.clicks }}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn btn-sm bg-warning fw-bold rounded-5 lew-copy-btn">
+                            Copy
+                        </button>
+                    </td>
                 </tr>
             </tbody>
         {% endfor %}

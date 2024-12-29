@@ -112,6 +112,10 @@ const copyToClipboard = async (message, error) => {
 }
 
 
+
+// The .lew-copy-url will only visible, after the request  is made
+// for hashing the URL and page reloads. Before that there might will
+// be shown in console.
 const copyHashUrl = async () => {
     document.querySelector(".lew-copy-btn").addEventListener("click", async () => {
         const hashUrl = document.querySelector(".lew-short-url").innerText;

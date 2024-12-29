@@ -29,6 +29,7 @@ class RegisterForm(forms.Form):
         
     )
     password1 = forms.CharField(
+        label="Password",
         widget=forms.PasswordInput(attrs={"id":'register-password1'}),
         help_text="Password must contain atleast 8 digits.",
         max_length=120,
@@ -36,6 +37,7 @@ class RegisterForm(forms.Form):
         
     )
     password2 = forms.CharField(
+        label="Enter password again",
         widget=forms.PasswordInput(attrs={"id":'register-password2'}),
         help_text="Password must contain atleast 8 digits.",
         max_length=120,

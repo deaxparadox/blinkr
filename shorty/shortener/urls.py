@@ -1,4 +1,4 @@
-from django.urls import path, include
+from django.urls import path, include, re_path
 
 from shortener.views.auth import (
     index_view,
@@ -8,6 +8,10 @@ from shortener.views.auth import (
     history_view,
     view_search_view,
     dashboard_view
+)
+from shortener.views.redirect import (
+    dashboard_view_redirect,
+    history_view_redirect
 )
 from shortener.views.anonymous import anonymous_user_view
 
@@ -22,6 +26,10 @@ urlpatterns = [
     path("history/", history_view, name='history'),
     path("<str:url_hash>/", access_view, name="access"),
     
+    
+    # redirect views to proper path
+    re_path(r"^dashboard$", dashboard_view_redirect, name="dashboard_redirect"),
+    re_path(r"^history$", history_view_redirect, name="history_redirect"),
     
     # Anonymous users paths is specified in shorty/views.py
     path("", anonymous_user_view, name="anonymous")
