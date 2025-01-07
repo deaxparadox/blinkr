@@ -19,6 +19,7 @@ URL shortening web application, this application helps you hash the long URLs in
         - [Login](tests/authentication.md)
 - [Logging system](log.md)
 - [Session system](session.md)
+- [SEO](seo/README.md)
 
 ### Helpful JavaScript
 
