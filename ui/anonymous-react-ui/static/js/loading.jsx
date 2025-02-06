@@ -25,7 +25,7 @@ const loadingHandler = ({ active }) => {
     if (active) {
         document.querySelector(".lew-loading-container-outer").style.display = "block";
     } else {
-        document.querySelector(".lew-loading-container-outer    ").style.display = "none";
+        document.querySelector(".lew-loading-container-outer").style.display = "none";
     }
 
 }

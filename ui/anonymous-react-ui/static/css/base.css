@@ -1,0 +1,33 @@
+:root {
+    --background-color: white;
+    --foreground-color: black;
+}
+
+html, body {
+    padding: 0;
+    margin: 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+}
+
+.lew-main-container {
+    display: flex;
+    flex-direction: column; /* Stack children vertically */
+    height: 100vh; /* Full viewport height */
+}
+
+.lew-navbar-container {
+    height: 50px; /* Fixed height */
+    background-color: aliceblue;
+    /* background-color: ; */
+}
+.lew-form-container {
+    flex-grow: 1; /* Takes up remaining space */
+    background-color: green;
+}
+.lew-footer-container {
+    height: 50px; /* Fixed height */
+    background-color: red;
+}

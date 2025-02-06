@@ -29,7 +29,7 @@ const HashForm = () => {
     }
 
     return (
-        <div className="lew-container">
+        <div className="lew-form-container">
             {/* <Loading /> */}
             <div className="lew-inner">
                 <div className="lew-form-box">

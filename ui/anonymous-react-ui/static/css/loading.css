@@ -1,12 +1,3 @@
-:root {
-    --background-color: white;
-    --foreground-color: black;
-}
-
-html, body {
-    padding: 0;
-    margin: 0;
-}
 
 .lew-loading-container-outer {
     display: none;
